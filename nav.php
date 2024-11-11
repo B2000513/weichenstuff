@@ -2,7 +2,7 @@
     // Get the current page name
     $currentPage = basename($_SERVER['PHP_SELF']);
 ?>
-
+ <link rel="stylesheet" href="css/sidebar.css">
 <style>
     .logout {
         margin-top: 70px;

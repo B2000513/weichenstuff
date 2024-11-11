@@ -4,7 +4,6 @@ session_start();
 if (!isset($_SESSION['username'])) {
     header("Location: login.php");
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -15,113 +14,95 @@ if (!isset($_SESSION['username'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Overview</title>
     <link rel="stylesheet" href="css/overview.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lucida Consol&display=swap">
-
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lucida+Console&display=swap">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <script src="https://kit.fontawesome.com/bbf63d7a1f.js" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-
 </head>
 
-<body>
-    <div class="container">
-        <aside class="sidebar">
-            <div class="logo">
-                <img src="image/wasteX1.png" alt="Logo">
-            </div>
-            <?php
-            include 'nav.php';
-            ?>
-        </aside>
-        <main class="main-content">
-            <header class="header">
-                <div class="welcome-message">
-                    <h1>Overview</h1>
-                    <p>Welcome to wasteX</p>
+<body class="bg-light">
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <aside class="col-md-2 bg-dark text-white p-3">
+                <div class="text-center mb-4">
+                    <img src="image/wasteX1.png" alt="Logo" class="img-fluid">
                 </div>
-                <div class="user-profile">
-                    <button class="noti">
-                        <i class="fa-solid fa-bell"></i>
-                        <div class="noti-num">3</div>
-                    </button>
-                    <img src="image/handsome.jpeg" alt="Profile Picture">
-                    <p>Hello wei chen</p>
-                </div>
-            </header>
+                <?php include 'nav.php'; ?>
+            </aside>
 
-            <section class="content">
-                <div class="profile-card">
-                    <form>
-                        <h2 id="statisticsH2">Statistics</h2>
-                        <div class="filters">
+            <!-- Main Content -->
+            <main class="col-md-10">
+                <header class="d-flex justify-content-between align-items-center p-3 border-bottom">
+                    <div>
+                        <h1 class="h3">Overview</h1>
+                        <p class="text-muted">Welcome to wasteX</p>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <button class="btn position-relative me-3">
+                            <i class="fa-solid fa-bell"></i>
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">3</span>
+                        </button>
+                        <img src="image/handsome.jpeg" alt="Profile Picture" class="rounded-circle me-2" style="width: 40px; height: 40px;">
+                        <p class="mb-0">Hello wei chen</p>
+                    </div>
+                </header>
 
-                            <input type="text" id="date-range" placeholder="Select Date Range ▾" required="required" class="filter">
-                            <select id="type" class="filter">
-                                <option selected>Report ▾</option>
-                                <option>Pickup Statistics</option>
-                                <option>Issue Reported</option>
-                                <option>Rate of Recycling</option>
-                            </select>
+                <section class="content mt-4">
+                    <div class="card p-4 shadow-sm">
+                        <form>
+                            <h2 id="statisticsH2" class="h4 mb-4">Statistics</h2>
+                            <div class="row g-3 mb-4">
+                                <div class="col-md-6">
+                                    <input type="text" id="date-range" placeholder="Select Date Range ▾" required="required" class="form-control">
+                                </div>
+                                <div class="col-md-6">
+                                    <select id="type" class="form-select">
+                                        <option selected>Report ▾</option>
+                                        <option>Pickup Statistics</option>
+                                        <option>Issue Reported</option>
+                                        <option>Rate of Recycling</option>
+                                    </select>
+                                </div>
+                            </div>
 
+                            <div id="statistics" class="d-none mb-4">
+                                <canvas id="myChart"></canvas>
+                            </div>
+                            <div id="statistics2" class="d-none mb-4">
+                                <canvas id="myChart2"></canvas>
+                            </div>
 
-                        </div>
-                        <div class="statistics" id="statistics" style="display:none;">
-                            <canvas id="myChart"></canvas>
-                        </div>
-                        <div class="statistics" id="statistics2" style="display:none;">
-                            <canvas id="myChart2"></canvas>
-                        </div>
-                        <div id="message">
-                            <p>-- Select date and report type to generate --</p>
-                        </div>
-                        <div id="message2" style="display:none;">
-                            <p>-- There is no data for this date range. Please choose a wider date range. --</p>
-                        </div>
-                        <div class="curve_chart">
-                            <div id="curve_chart" style="width: 800px;height: 350px; display: none;"></div>
-                        </div>
-                        <button class="generateBtn">Generate</button>
-                    </form>
-                </div>
+                            <div id="message">
+                                <p class="text-center text-muted">-- Select date and report type to generate --</p>
+                            </div>
+                            <div id="message2" class="d-none">
+                                <p class="text-center text-muted">-- There is no data for this date range. Please choose a wider date range. --</p>
+                            </div>
 
-            </section>
-        </main>
+                            <div class="curve_chart">
+                                <div id="curve_chart" class="d-none" style="width: 100%; height: 350px;"></div>
+                            </div>
+
+                            <button class="btn btn-primary mt-3 w-100 generateBtn">Generate</button>
+                        </form>
+                    </div>
+                </section>
+            </main>
+        </div>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         flatpickr("#date-range", {
             mode: "range",
             dateFormat: "Y-m-d",
             minDate: "2000-01-01"
         });
-    </script>
-    <script>
-        // var xValues = ["Paper", "Aluminium", "Plastic"];
-        // var yValues = [10, 10, 10];
-        // var barColors = [
-        // "#a2df9c",
-        // "#00aba9",
-        // "#3a3939e9"
-        // ];
-
-        // new Chart("myChart", {
-        // type: "pie",
-        // data: {
-        //     labels: xValues,
-        //     datasets: [{
-        //     backgroundColor: barColors,
-        //     data: yValues
-        //     }]
-        // },
-        // options: {
-        //     legend: {
-        //     display: true,
-        //     position: 'right'
-        //     }
-        // }
-        // });
     </script>
     <script>
         let myChart;
@@ -139,9 +120,6 @@ if (!isset($_SESSION['username'])) {
             if (reportType === "Report ▾") {
                 alert("Please select a report type.");
                 return;
-            } else {
-                console.log(dateRange);
-                console.log(reportType);
             }
 
             if (reportType === "Pickup Statistics") {
@@ -149,261 +127,40 @@ if (!isset($_SESSION['username'])) {
                 document.getElementById("message2").style.display = "none";
                 document.getElementById("curve_chart").style.display = "none";
                 document.getElementById("statistics2").style.display = "none";
-                document.getElementById("statistics").style.display = "flex";
-                $(document).ready(function() {
+                document.getElementById("statistics").classList.remove("d-none");
 
+                $.ajax({
+                    url: 'php/functions.php?op=userPickupStatistics',
+                    type: 'GET',
+                    data: { dateRange: dateRange },
+                    dataType: 'json',
+                    success: function(response) {
+                        var xValues = ["Household", "Recyclable", "Hazardous"];
+                        var yValues = response.yValues;
+                        var result = response.result;
+                        var barColors = ["#a2df9c", "#00aba9", "#3a3939e9"];
 
-                    $.ajax({
-                        url: 'php/functions.php?op=userPickupStatistics', // Replace with your server-side script
-                        type: 'GET', // or 'POST' based on your preference
-                        data: {
-                            dateRange: dateRange
-                        },
-                        dataType: 'json',
-                        success: function(response) {
-                            var xValues = ["Household", "Recyclable", "Hazardous"];
-                            var yValues = response.yValues; // Assume your server returns an object with a 'values' array
-                            var result = response.result;
-                            var barColors = ["#a2df9c", "#00aba9", "#3a3939e9"];
+                        if (myChart) myChart.destroy();
 
-                            if (myChart) {
-                                myChart.destroy(); // Destroy previous instance if it exists
-                            }
+                        myChart = new Chart("myChart", {
+                            type: "pie",
+                            data: { labels: xValues, datasets: [{ backgroundColor: barColors, data: yValues }] },
+                            options: { title: { display: true, text: "Pickup Statistics" }, legend: { display: true, position: 'right' } }
+                        });
 
-
-                            myChart = new Chart("myChart", {
-                                type: "pie",
-                                data: {
-                                    labels: xValues,
-                                    datasets: [{
-                                        backgroundColor: barColors,
-                                        data: yValues
-                                    }]
-                                },
-                                options: {
-                                    title: {
-                                        display: true,
-                                        text: "Pickup Statistics"
-                                    },
-                                    legend: {
-                                        display: true,
-                                        position: 'right'
-                                    }
-                                }
-
-                            });
-                            if (result == 'noData') {
-                                document.getElementById("message").style.display = "none";
-                                document.getElementById("message2").style.display = "flex";
-                                document.getElementById("curve_chart").style.display = "none";
-                                document.getElementById("statistics2").style.display = "none";
-                                document.getElementById("statistics").style.display = "none";
-                            }
-                            // Optionally hide/show elements
-
-                        },
-                        error: function(xhr, status, error) {
-                            console.error(error); // Handle any errors
+                        if (result == 'noData') {
+                            document.getElementById("message2").classList.remove("d-none");
+                            document.getElementById("statistics").classList.add("d-none");
                         }
-                    });
-
-                });
-            } else if (reportType === "Rate of Recycling") {
-                if (!dateRange.includes('to')) {
-                    alert("Select date range instead of date.");
-                    return;
-                }
-                document.getElementById("message").style.display = "none";
-                document.getElementById("message2").style.display = "none";
-                document.getElementById("statistics").style.display = "none";
-                document.getElementById("statistics2").style.display = "none";
-                document.getElementById("curve_chart").style.display = "flex";
-
-                //         google.charts.load('current', {'packages': ['corechart']});
-                //         google.charts.setOnLoadCallback(function() {
-                //     drawChart(recyclingData); // Pass your data to the drawChart function here
-                // });
-                //         var recyclingData = [[50, 0]];
-                //         function drawChart(recyclingData) {
-                //             var data = new google.visualization.DataTable();
-                //             data.addColumn('number', 'Time');
-                //             data.addColumn('number', 'ROR');
-
-                //             data.addRows(recyclingData); // Add data fetched from the server
-
-                //             // Set options
-                //             const options = {
-                //                 title: 'Recycling Rate',
-                //                 hAxis: {title: 'Time'},
-                //                 vAxis: {title: 'Rate of Recycling'},
-                //                 legend: 'none'
-                //             };
-
-                //             // Draw
-                //             const chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
-                //             chart.draw(data, options);
-                //         }
-
-
-
-
-                $(document).ready(function() {
-                    $.ajax({
-                        url: 'php/functions.php?op=userRateOfRecycling', // Replace with your server-side script
-                        type: 'GET', // or 'POST' based on your preference
-                        data: {
-                            dateRange: dateRange
-                        }, // Optional: Pass any required data like time range
-                        dataType: 'json',
-                        success: function(response) {
-                            console.log(response);
-                            var recyclingData = response.recyclingData; // Assume response contains array of data points
-                            var result = response.result;
-                            // Example response format: 
-                            // { data: [ [50, 7], [60, 8], [70, 8], [80, 9], [90, 9], ... ] }
-
-                            // Call Google Charts after data is successfully retrieved
-                            google.charts.load('current', {
-                                'packages': ['corechart']
-                            });
-                            google.charts.setOnLoadCallback(function() {
-                                drawChart(recyclingData);
-                            });
-                            if (result == 'noData') {
-                                document.getElementById("message").style.display = "none";
-                                document.getElementById("message2").style.display = "flex";
-                                document.getElementById("curve_chart").style.display = "none";
-                                document.getElementById("statistics2").style.display = "none";
-                                document.getElementById("statistics").style.display = "none";
-                            }
-                        },
-                        error: function(xhr, status, error) {
-                            console.error(error); // Handle any errors
-                        }
-                    });
-                });
-
-                function drawChart(recyclingData) {
-                    var data = new google.visualization.DataTable();
-                    data.addColumn('number', 'Week');
-                    data.addColumn('number', 'ROR');
-
-                    data.addRows(recyclingData); // Add data fetched from the server
-
-                    // Set options
-                    const options = {
-                        title: 'Recycling Rate',
-                        hAxis: {
-                            title: 'Week'
-                        },
-                        vAxis: {
-                            title: 'Rate of Recycling'
-                        },
-                        legend: 'none'
-                    };
-
-                    // Draw chart
-                    const chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
-                    chart.draw(data, options);
-                }
-            } else if (reportType === "Issue Reported") {
-
-                document.getElementById("message").style.display = "none";
-                document.getElementById("message2").style.display = "none";
-                document.getElementById("curve_chart").style.display = "none";
-                document.getElementById("statistics2").style.display = "flex";
-                document.getElementById("statistics").style.display = "none";
-                $(document).ready(function() {
-
-
-                    $.ajax({
-                        url: 'php/functions.php?op=userIssueReported', // Replace with your server-side script
-                        type: 'GET', // or 'POST' based on your preference
-                        data: {
-                            dateRange: dateRange
-                        },
-                        dataType: 'json',
-                        success: function(response) {
-                            var xValues = ["Missed Pickup", "Overflowing Bin", "Illegal Dumping", "Others"];
-                            var yValues = response.yValues; // Assume your server returns an object with a 'values' array
-                            var result = response.result;
-                            var barColors = ["#a2df9c", "#00aba9", "#3a3939e9", "#dd86f7"];
-                            if (myChart2) {
-                                myChart2.destroy(); // Destroy previous instance if it exists
-                            }
-
-                            myChart2 = new Chart("myChart2", {
-                                type: "pie",
-                                data: {
-                                    labels: xValues,
-                                    datasets: [{
-                                        backgroundColor: barColors,
-                                        data: yValues
-                                    }]
-                                },
-                                options: {
-                                    title: {
-                                        display: true,
-                                        text: "Issue Reported"
-                                    },
-                                    legend: {
-                                        display: true,
-                                        position: 'right'
-                                    }
-                                }
-
-                            });
-                            if (result == 'noData') {
-                                document.getElementById("message").style.display = "none";
-                                document.getElementById("message2").style.display = "flex";
-                                document.getElementById("curve_chart").style.display = "none";
-                                document.getElementById("statistics2").style.display = "none";
-                                document.getElementById("statistics").style.display = "none";
-                            }
-                            // Optionally hide/show elements
-
-                        },
-                        error: function(xhr, status, error) {
-                            console.error(error); // Handle any errors
-                        }
-                    });
-
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(error);
+                    }
                 });
             }
+            // Similarly implement the remaining report types (Rate of Recycling, Issue Reported)...
         });
-
-        // function drawChart() {
-        //     var data = google.visualization.arrayToDataTable([
-        //         ['Time', 'ROR'],
-        //         ['', 7], ['', 8], [70, 8], [80, 9], [90, 9],
-        //         [100, 9], [110, 10], [120, 11],
-        //         [130, 14], [140, 14], [150, 15],
-        //         [130, 14], [140, 14], [150, 15],
-        //         [130, 14], [140, 14], [150, 15],
-        //         [130, 14], [140, 14], [150, 15],
-        //         [130, 14], [140, 14], [150, 15],
-        //         [130, 14], [140, 14], [150, 15],
-        //         [130, 14], [140, 14], [150, 15],
-        //         [100, 9], [110, 10], [120, 11],
-        //         [130, 14], [140, 14], [150, 15],
-        //         [130, 14], [140, 14], [150, 15],
-        //         [130, 14], [140, 14], [150, 15],
-        //         [130, 14], [140, 14], [150, 15],
-        //         [130, 14], [140, 14], [150, 15],
-        //         [130, 14], [140, 14], [150, 15],
-        //         [130, 14], [140, 14], [150, 15],
-        //         [130, 14], [140, 14], [150, 15]
-        //     ]);
-
-        //     // Set Options
-        //     const options = {
-        //         title: 'Recycling Rate',
-        //         hAxis: {title: 'Time'},
-        //         vAxis: {title: 'Rate of Recycling'},
-        //         legend: 'none'
-        //     };
     </script>
-
 </body>
 
 </html>

@@ -16,190 +16,180 @@ if (!isset($_SESSION['username'])) {
     <title>My Dashboard</title>
     <link rel="stylesheet" href="css/dashboard.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lucida Consol&display=swap">
-
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://kit.fontawesome.com/bbf63d7a1f.js" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+
+    
 </head>
 
-<body>
-    <div class="container">
-        <aside class="sidebar">
-            <div class="logo">
-                <img src="image/wasteX1.png" alt="Logo">
-            </div>
-            <!-- <nav class="menu">
-                <ul>
-                    <li><a href="dashboard.php" class="active"><i class="fa-solid fa-table-columns"></i><span>My dashboard</span></a></li>
-                    <li><a href="account.php"><i class="fa-solid fa-user"></i><span>Accounts</span></a></li>
-                    <li><a href="reportIssue.php"><i class="fa-solid fa-comment-dots"></i><span>Report</span></a></li>
-                    <li><a href="schedule.php"><i class="fa-solid fa-calendar-days"></i><span>Schedule PickUp</span></a></li>
-                    <li><a href="history.php"><i class="fa-solid fa-clock-rotate-left"></i><span>History</span></a></li>
-                    <li><a href="overview.php"><i class="fa-solid fa-chart-simple"></i><span>Overview</span></a></li>
-                    <li><a href="overview.php"><i class="fa-solid fa-arrow-right-from-bracket logout"></i><span>Logout</span></a></li>
-                </ul>
-            </nav> -->
-            <?php
-            include 'nav.php';
-            ?>
-        </aside>
-        <main class="main-content">
-            <header class="header">
-                <div class="welcome-message">
-                    <h1>My Dashboard</h1>
-                    <p>Welcome to wasteX</p>
+<body class="bg-light">
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <aside class="col-md-2 bg-dark text-white p-3">
+                <div class="text-center mb-4">
+                    <img src="image/wasteX1.png" alt="Logo" class="img-fluid">
                 </div>
-                <div class="user-profile">
-                    <button class="noti" onClick="toggleNotiDropdown()">
-                        <i class="fa-solid fa-bell" id="noti-icon"></i>
-                    </button>
-                    <div class="noti-dropdown" id="notiDropdown">
-                        <?php
-                        global $dbConnection;
-                        $email = $_SESSION['username'];
-                        $sql = "SELECT comID FROM user WHERE userEmail = '$email'";
-                        $result = mysqli_query($dbConnection, $sql);
-                        $row = mysqli_fetch_assoc($result);
-                        $comID = $row['comID'];
+                <?php include 'nav.php'; ?>
+            </aside>
 
-                        $sql2 = "SELECT annoTitle, annoDesc, annoDate, annoImage FROM announcement WHERE comID = '$comID'";
-                        $result = mysqli_query($dbConnection, $sql2);
-                        while ($row = mysqli_fetch_assoc($result)) {
-                            echo "<div class='noti-item' onclick=\"showNotificationDetails('" . addslashes($row['annoTitle']) . "', '" . $row['annoDate'] . "', 'photoUpload/" . $row['annoImage'] . "', '" . addslashes($row['annoDesc']) . "')\">
-                                    <h3>" . htmlspecialchars($row['annoTitle']) . "</h3>
-                                    <p>" . htmlspecialchars(substr($row['annoDesc'], 0, 50)) . "...</p>
-                                </div>";
-                        }
-
-                        ?>
+            <!-- Main Content -->
+            <main class="col-md-9 col-lg-10">
+                <header class="d-flex justify-content-between align-items-center p-3 border-bottom">
+                    <div>
+                        <h1>My Dashboard</h1>
+                        <p class="text-muted">Welcome to wasteX</p>
                     </div>
-                    <img src="image/handsome.jpeg" alt="Profile Picture">
-                    <?php
-                    $sql = "SELECT userFname, userLname FROM user WHERE comID = '$comID'";
-                    $result = mysqli_query($dbConnection, $sql);
-                    $row = mysqli_fetch_assoc($result);
-                    $fname = $row['userFname'];
-                    $lname = $row['userLname'];
-                    ?>
-                    <p>Hello <?php echo $fname ?></p>
-                </div>
-            </header>
-
-            <section class="content">
-                <div class="profile-card col-md-6">
-                    <?php
-                    $sql2 = "SELECT comArea FROM community WHERE comID = '$comID'";
-                    $result2 = mysqli_query($dbConnection, $sql2);
-                    $row2 = mysqli_fetch_assoc($result2);
-
-                    echo "<h2>" . $row2['comArea'] . "</h2>";
-                    ?>
-
-
-                    <div class="details">
-                    <div class="timetable">
-                <p class="timetable-font">Timetable</p>
-
-                <?php
-                // Function to display the timetable for a given day
-                function displayTimetable($day, $comID, $dbConnection) {
-                    // Query to fetch time slots for the given day
-                    $sql = "SELECT scheTime FROM schedule WHERE comID = '$comID' AND scheDay = '$day' ORDER BY STR_TO_DATE(scheTime, '%h:%i %p') ASC";
-                    $result = mysqli_query($dbConnection, $sql);
-
-                    $timeSlots = [];
-                    while ($row = mysqli_fetch_assoc($result)) {
-                        $timeSlots[] = $row['scheTime'];
-                    }
-
-                    // Output the time slots or placeholder if empty
-                    if (count($timeSlots) == 2) {
-                        echo '<span class="time">' . implode(', ', $timeSlots) . '</span>';
-                    } elseif (count($timeSlots) == 1) {
-                        echo '<span class="time">' . $timeSlots[0] . '</span>';
-                    } else {
-                        echo '<span class="time">-</span>';
-                    }
-                }
-
-                // Days of the week to display
-                $daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
-
-                foreach ($daysOfWeek as $day) {
-                    echo '<div class="timetable-container">';
-                    echo '<span class="day">' . $day . '</span>';
-                    displayTimetable($day, $comID, $dbConnection);
-                    echo '</div>';
-                    echo '<hr class="timetableHR">';
-                }
-                ?>
-            </div>
-
-
-                    </div>
-                    <div class="schedule">
-                        <button class="schedule-btn" onclick="window.location.href='schedule.php';">
-                            <span id="schedule-text">Schedule&nbsp;</span>
-                            <span id="your-text">Your</span>
-                            <span id="pickup-text">&nbsp;Pickup</span>
+                    <div class="d-flex align-items-center">
+                        <button class="btn btn-light me-3 position-relative" onclick="toggleNotiDropdown()">
+                            <i class="fa-solid fa-bell"></i>
                         </button>
-                    </div>
 
-                </div>
-                <div class="account-bill-container">
-                    <div class="accounts">
-                        <h2 class="history-h2">Recent PickUp History</h2>
-                        <div class="history">
+                        <!-- Notifications Dropdown -->
+                        <div class="position-absolute noti-dropdown bg-white shadow p-3" id="notiDropdown" style="display: none;">
+                            <button class="btn-close" onclick="closeNotiDropdown()"></button>
                             <?php
-                            $sql = "SELECT userID FROM user WHERE userEmail = '$email'";
+                            global $dbConnection;
+                            $email = $_SESSION['username'];
+                            $sql = "SELECT comID FROM user WHERE userEmail = '$email'";
                             $result = mysqli_query($dbConnection, $sql);
                             $row = mysqli_fetch_assoc($result);
-                            $userID = $row['userID'];
+                            $comID = $row['comID'];
 
-                            $sql2 = "SELECT * FROM pickup WHERE userID = '$userID' ORDER BY pickupDate DESC LIMIT 3";
-                            $result2 = mysqli_query($dbConnection, $sql2);
-                            $empty = 3 - mysqli_num_rows($result2);
-                            while ($row2 = mysqli_fetch_assoc($result2)) {
-                                $day = date('l', strtotime($row2['pickupDate']));
-                                echo '<div class="history-content">';
-                                echo '    <p>' . $day . ' ' . $row2['pickupDate'] . '</p>';
-                                echo '    <p>Type: ' . ucfirst($row2['pickupType']) . ' Waste</p>';
-                                echo '</div>';
-                                echo '<hr class="history-line"></hr>';
+                            $sql2 = "SELECT annoTitle, annoDesc, annoDate, annoImage FROM announcement WHERE comID = '$comID'";
+                            $result = mysqli_query($dbConnection, $sql2);
+                            while ($row = mysqli_fetch_assoc($result)) {
+                                echo "<div class='noti-item' onclick=\"showNotificationDetails('" . addslashes($row['annoTitle']) . "', '" . $row['annoDate'] . "', 'photoUpload/" . $row['annoImage'] . "', '" . addslashes($row['annoDesc']) . "')\">
+                                        <h6 class='fw-bold'>" . htmlspecialchars($row['annoTitle']) . "</h6>
+                                        <p class='text-muted'>" . htmlspecialchars(substr($row['annoDesc'], 0, 50)) . "...</p>
+                                      </div>";
                             }
-
-                            for ($i = 0; $i < $empty; $i++) {
-                                echo '<div class="history-content">';
-                                echo '    <p>No</p>';
-                                echo '    <p>History</p>';
-                                echo '</div>';
-                                echo '<hr class="history-line"></hr>';
-                            }
-
-
                             ?>
-
                         </div>
 
-                    </div>
-                    <div class="statistics">
-                        <h2 class="statistics-h2">Statistics</h2>
-                        <canvas id="myChart"></canvas>
-
-                    </div>
-                    <div id="notification-modal" class="modal">
-                        <div class="modal-content">
-                            <span class="close" onclick="closeModal()">&times;</span>
-                            <h3 id="modal-title"></h3>
-                            <p id="modal-date"></p>
-                            <img id="modal-image" src="" alt="Notification Image" />
-                            <p id="modal-content"></p>
+                        <div class="text-center">
+                            <img src="image/handsome.jpeg" alt="Profile Picture" class="rounded-circle" width="40" height="40">
+                            <?php
+                            $sql = "SELECT userFname, userLname FROM user WHERE comID = '$comID'";
+                            $result = mysqli_query($dbConnection, $sql);
+                            $row = mysqli_fetch_assoc($result);
+                            $fname = $row['userFname'];
+                            ?>
+                            <p class="mb-0">Hello <?php echo htmlspecialchars($fname); ?></p>
                         </div>
                     </div>
-                </div>
-            </section>
+                </header>
 
-        </main>
+                <!-- Content Section -->
+                <section class="p-3">
+                    <div class="row">
+                        <!-- Profile Card -->
+                        <div class="col-md-6 mb-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <?php
+                                    $sql2 = "SELECT comArea FROM community WHERE comID = '$comID'";
+                                    $result2 = mysqli_query($dbConnection, $sql2);
+                                    $row2 = mysqli_fetch_assoc($result2);
+                                    ?>
+                                    <h2 class="card-title"><?php echo htmlspecialchars($row2['comArea']); ?></h2>
+
+                                    <div class="mt-3">
+                                        <h5 class="fw-bold">Timetable</h5>
+                                        <?php
+                                        function displayTimetable($day, $comID, $dbConnection) {
+                                            $sql = "SELECT scheTime FROM schedule WHERE comID = '$comID' AND scheDay = '$day' ORDER BY STR_TO_DATE(scheTime, '%h:%i %p') ASC";
+                                            $result = mysqli_query($dbConnection, $sql);
+
+                                            $timeSlots = [];
+                                            while ($row = mysqli_fetch_assoc($result)) {
+                                                $timeSlots[] = $row['scheTime'];
+                                            }
+
+                                            echo '<span class="text-muted">' . ($timeSlots ? implode(', ', $timeSlots) : '-') . '</span>';
+                                        }
+
+                                        $daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+                                        foreach ($daysOfWeek as $day) {
+                                            echo '<div class="d-flex justify-content-between border-bottom py-2">';
+                                            echo '<span class="fw-bold">' . $day . '</span>';
+                                            displayTimetable($day, $comID, $dbConnection);
+                                            echo '</div>';
+                                        }
+                                        ?>
+                                    </div>
+                                    <button class="btn btn-primary mt-4 w-100" onclick="window.location.href='schedule.php';">Schedule Your Pickup</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right Column - Account & Statistics -->
+                        <div class="col-md-6">
+                            <div class="card mb-4">
+                                <div class="card-body">
+                                    <h5 class="card-title">Recent PickUp History</h5>
+                                    <div>
+                                        <?php
+                                        $sql = "SELECT userID FROM user WHERE userEmail = '$email'";
+                                        $result = mysqli_query($dbConnection, $sql);
+                                        $row = mysqli_fetch_assoc($result);
+                                        $userID = $row['userID'];
+
+                                        $sql2 = "SELECT * FROM pickup WHERE userID = '$userID' ORDER BY pickupDate DESC LIMIT 3";
+                                        $result2 = mysqli_query($dbConnection, $sql2);
+                                        $empty = 3 - mysqli_num_rows($result2);
+                                        while ($row2 = mysqli_fetch_assoc($result2)) {
+                                            $day = date('l', strtotime($row2['pickupDate']));
+                                            echo '<div class="border-bottom py-2">';
+                                            echo '<p class="mb-0">' . $day . ' ' . $row2['pickupDate'] . '</p>';
+                                            echo '<p class="text-muted">Type: ' . ucfirst($row2['pickupType']) . ' Waste</p>';
+                                            echo '</div>';
+                                        }
+
+                                        for ($i = 0; $i < $empty; $i++) {
+                                            echo '<div class="border-bottom py-2 text-muted">';
+                                            echo '<p class="mb-0">No History</p>';
+                                            echo '</div>';
+                                        }
+                                        ?>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Statistics</h5>
+                                    <canvas id="myChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
     </div>
+
+    <!-- Notification Modal -->
+    <div class="modal fade" id="notification-modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modal-title"></h5>
+                    <button type="button" class="btn-close" onclick="closeModal()"></button>
+                </div>
+                <div class="modal-body">
+                    <p id="modal-date"></p>
+                    <img id="modal-image" src="" alt="Notification Image" class="img-fluid mb-3" />
+                    <p id="modal-content"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/dashboard.js"></script>
+
 
     <?php
     // Query 1
@@ -253,27 +243,24 @@ if (!isset($_SESSION['username'])) {
         });
     </script>
 
-    <script>
-        function toggleNotiDropdown() {
-            var dropdown = document.getElementById("notiDropdown");
-            if (dropdown.style.display === "block") {
-                dropdown.style.display = "none";
-            } else {
-                dropdown.style.display = "block";
-            }
-        }
+<script>
+    function toggleNotiDropdown() {
+        const dropdown = document.getElementById('notiDropdown');
+        dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
+    }
 
-        // Optionally, close the dropdown if clicked outside of it
-        window.onclick = function(event) {
+    function closeNotiDropdown() {
+        document.getElementById('notiDropdown').style.display = 'none';
+    }
 
-            if (!event.target.matches('.noti') && !event.target.closest('.noti-dropdown')) {
-                var dropdown = document.getElementById("notiDropdown");
-                if (dropdown.style.display === "block") {
-                    dropdown.style.display = "none";
-                }
-            }
+    // Close dropdown when clicking outside of it
+    window.onclick = function(event) {
+        const dropdown = document.getElementById('notiDropdown');
+        if (!event.target.matches('.noti, .noti *')) {
+            dropdown.style.display = 'none';
         }
-    </script>
+    }
+</script>
 
     <script>
         // document.addEventListener('DOMContentLoaded', function () {

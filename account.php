@@ -9,48 +9,72 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lucida+Sans&display=swap">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://kit.fontawesome.com/bbf63d7a1f.js" crossorigin="anonymous"></script>
+    <style>
+        /* General container styling */
+        .account-container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 30px;
+            background-color: #f8f9fa;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .header, .welcome-message {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .avatar img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .btn-avatar {
+            margin-top: 10px;
+            font-size: 14px;
+        }
+        .input-container {
+            position: relative;
+        }
+        .input-container .edit-button {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+        }
+        .btn {
+            font-size: 16px;
+        }
+        .form-container {
+            padding: 10px;
+        }
+    </style>
 </head>
 
 <body>
     <div class="container1">
-        <aside class="sidebar">
+        
+        <aside class="col-md-3 col-lg-2 bg-dark text-light p-3">
             <div class="logo">
-                <img src="image/wasteX1.png" alt="Logo">
+                <img src="" alt="Logo">
             </div>
             <?php include 'nav.php'; ?>
         </aside>
-
+        </aside>
         <main class="main-content">
-            <header class="header">
-                <div class="welcome-message">
-                    <h1>My Account</h1>
-                    <p>Welcome to wasteX</p>
-                </div>
-                <div class="user-profile">
-                    <button class="noti">
-                        <i class="fa-solid fa-bell"></i>
-                        <span class="noti-num">3</span>
-                    </button>
-                    <img src="image/handsome.jpeg" alt="Profile Picture">
-                    <p>Hello Nigg4</p>
-                </div>
-            </header>
-
-            <section class="content">
-                <div class="container">
-                    <!-- Profile Image Section -->
-                    <div class="row align-items-center mb-4">
-                        <div class="col-3 text-center">
-                            <div class="avatar">
-                                <img src="image/handsome.jpeg" alt="User Avatar">
-                            </div>
-                        </div>
-                        <div class="col-1 d-flex flex-column btn-div">
-                            <button class="btn btn-avatar btn-change">Change</button>
-                            <button class="btn btn-avatar btn-delete">Delete</button>
-                        </div>
-                        <div class="col-6"></div>
+            <div class="account-container">
+                <header class="header">
+                    <div class="welcome-message">
+                        <h1>My Account</h1>
+                        
                     </div>
+                    
+                </header>
+
+               
+                   
 
                     <!-- Form Fields -->
                     <form>
@@ -70,7 +94,7 @@
                                 <label for="password">Password</label>
                                 <div class="input-container">
                                     <input type="password" class="form-control" id="password" placeholder="Password">
-                                    <button class="edit-button btn">
+                                    <button class="edit-button">
                                         <i class="fa-solid fa-pen"></i>
                                     </button>
                                 </div>
@@ -90,14 +114,14 @@
 
                         <!-- Action Buttons -->
                         <div class="row mt-4">
-                            <div class="col-2 offset-8 d-flex justify-content-between">
+                            <div class="col d-flex justify-content-end gap-2">
                                 <button type="button" class="btn btn-secondary">Cancel</button>
                                 <button type="submit" class="btn btn-success">Save</button>
                             </div>
                         </div>
                     </form>
-                </div>
-            </section>
+                
+            </div>
         </main>
     </div>
 </body>
