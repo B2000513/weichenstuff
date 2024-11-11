@@ -14,7 +14,7 @@ if (!isset($_SESSION['username'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Dashboard</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dashboard.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lucida Consol&display=swap">
 
     <script src="https://kit.fontawesome.com/bbf63d7a1f.js" crossorigin="anonymous"></script>
@@ -85,7 +85,7 @@ if (!isset($_SESSION['username'])) {
             </header>
 
             <section class="content">
-                <div class="profile-card">
+                <div class="profile-card col-md-6">
                     <?php
                     $sql2 = "SELECT comArea FROM community WHERE comID = '$comID'";
                     $result2 = mysqli_query($dbConnection, $sql2);
@@ -96,172 +96,44 @@ if (!isset($_SESSION['username'])) {
 
 
                     <div class="details">
-                        <div class="timetable">
-                            <p class="timetable-font">Timetable</p>
-                            <div class="timetable-container">
-                                <span class="day">Monday</span>
-                                <?php
+                    <div class="timetable">
+                <p class="timetable-font">Timetable</p>
 
-                                $sql = "SELECT scheTime FROM schedule WHERE comID = '$comID' AND scheDay = 'Monday' ORDER BY STR_TO_DATE(scheTime, '%h:%i %p') ASC";
-                                $result = mysqli_query($dbConnection, $sql);
+                <?php
+                // Function to display the timetable for a given day
+                function displayTimetable($day, $comID, $dbConnection) {
+                    // Query to fetch time slots for the given day
+                    $sql = "SELECT scheTime FROM schedule WHERE comID = '$comID' AND scheDay = '$day' ORDER BY STR_TO_DATE(scheTime, '%h:%i %p') ASC";
+                    $result = mysqli_query($dbConnection, $sql);
 
+                    $timeSlots = [];
+                    while ($row = mysqli_fetch_assoc($result)) {
+                        $timeSlots[] = $row['scheTime'];
+                    }
 
-                                $timeSlots = [];
+                    // Output the time slots or placeholder if empty
+                    if (count($timeSlots) == 2) {
+                        echo '<span class="time">' . implode(', ', $timeSlots) . '</span>';
+                    } elseif (count($timeSlots) == 1) {
+                        echo '<span class="time">' . $timeSlots[0] . '</span>';
+                    } else {
+                        echo '<span class="time">-</span>';
+                    }
+                }
 
+                // Days of the week to display
+                $daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
 
-                                while ($row = mysqli_fetch_assoc($result)) {
-                                    $timeSlots[] = $row['scheTime'];
-                                }
+                foreach ($daysOfWeek as $day) {
+                    echo '<div class="timetable-container">';
+                    echo '<span class="day">' . $day . '</span>';
+                    displayTimetable($day, $comID, $dbConnection);
+                    echo '</div>';
+                    echo '<hr class="timetableHR">';
+                }
+                ?>
+            </div>
 
-
-                                if (count($timeSlots) == 2) {
-                                    echo '<span class="time">' . $timeSlots[0] . ', ' . $timeSlots[1] . '</span>';
-                                } elseif (count($timeSlots) == 1) {
-                                    echo '<span class="time">' . $timeSlots[0] . '</span>';
-                                } else {
-
-                                    echo '<span class="time">-</span>';
-                                }
-                                ?>
-
-
-                            </div>
-                            <hr class="timetableHR">
-                            <div class="timetable-container">
-                                <span class="day">Tuesday</span>
-                                <?php
-
-                                $sql = "SELECT scheTime FROM schedule WHERE comID = '$comID' AND scheDay = 'Tuesday' ORDER BY STR_TO_DATE(scheTime, '%h:%i %p') ASC";
-                                $result = mysqli_query($dbConnection, $sql);
-
-
-                                $timeSlots = [];
-
-
-                                while ($row = mysqli_fetch_assoc($result)) {
-                                    $timeSlots[] = $row['scheTime'];
-                                }
-
-
-                                if (count($timeSlots) == 2) {
-                                    echo '<span class="time">' . $timeSlots[0] . ', ' . $timeSlots[1] . '</span>';
-                                } elseif (count($timeSlots) == 1) {
-                                    echo '<span class="time">' . $timeSlots[0] . '</span>';
-                                } else {
-
-                                    echo '<span class="time">-</span>';
-                                }
-                                ?>
-                            </div>
-                            <hr class="timetableHR">
-                            <div class="timetable-container">
-                                <span class="day">Wednesday</span>
-                                <?php
-
-                                $sql = "SELECT scheTime FROM schedule WHERE comID = '$comID' AND scheDay = 'Wednesday' ORDER BY STR_TO_DATE(scheTime, '%h:%i %p') ASC";
-                                $result = mysqli_query($dbConnection, $sql);
-
-
-                                $timeSlots = [];
-
-
-                                while ($row = mysqli_fetch_assoc($result)) {
-                                    $timeSlots[] = $row['scheTime'];
-                                }
-
-
-                                if (count($timeSlots) == 2) {
-                                    echo '<span class="time">' . $timeSlots[0] . ', ' . $timeSlots[1] . '</span>';
-                                } elseif (count($timeSlots) == 1) {
-                                    echo '<span class="time">' . $timeSlots[0] . '</span>';
-                                } else {
-
-                                    echo '<span class="time">-</span>';
-                                }
-                                ?>
-                            </div>
-                            <hr class="timetableHR">
-                            <div class="timetable-container">
-                                <span class="day">Thursday</span>
-                                <?php
-
-                                $sql = "SELECT scheTime FROM schedule WHERE comID = '$comID' AND scheDay = 'Thursday' ORDER BY STR_TO_DATE(scheTime, '%h:%i %p') ASC";
-                                $result = mysqli_query($dbConnection, $sql);
-
-
-                                $timeSlots = [];
-
-
-                                while ($row = mysqli_fetch_assoc($result)) {
-                                    $timeSlots[] = $row['scheTime'];
-                                }
-
-
-                                if (count($timeSlots) == 2) {
-                                    echo '<span class="time">' . $timeSlots[0] . ', ' . $timeSlots[1] . '</span>';
-                                } elseif (count($timeSlots) == 1) {
-                                    echo '<span class="time">' . $timeSlots[0] . '</span>';
-                                } else {
-
-                                    echo '<span class="time">-</span>';
-                                }
-                                ?>
-                            </div>
-                            <hr class="timetableHR">
-                            <div class="timetable-container">
-                                <span class="day">Friday</span>
-                                <?php
-
-                                $sql = "SELECT scheTime FROM schedule WHERE comID = '$comID' AND scheDay = 'Friday' ORDER BY STR_TO_DATE(scheTime, '%h:%i %p') ASC";
-                                $result = mysqli_query($dbConnection, $sql);
-
-
-                                $timeSlots = [];
-
-
-                                while ($row = mysqli_fetch_assoc($result)) {
-                                    $timeSlots[] = $row['scheTime'];
-                                }
-
-
-                                if (count($timeSlots) == 2) {
-                                    echo '<span class="time">' . $timeSlots[0] . ', ' . $timeSlots[1] . '</span>';
-                                } elseif (count($timeSlots) == 1) {
-                                    echo '<span class="time">' . $timeSlots[0] . '</span>';
-                                } else {
-
-                                    echo '<span class="time">-</span>';
-                                }
-                                ?>
-                            </div>
-
-                        </div>
-                        <div class="type">
-                            <div class="type-circle">
-                                <div class="hover-window window1">
-                                    <strong>Paper Recycling</strong><br><br>
-                                    We accept newspapers, magazines, cardboard, and office paper. Please ensure they are clean and dry.<br>
-                                    <em>Tip:</em> Flatten cardboard boxes to save space.<br>
-                                    <em>Impact:</em> Recycling paper helps save trees and reduces landfill waste.
-                                </div>
-                            </div>
-                            <div class="type-circle">
-                                <div class="hover-window window2">
-                                    <strong>Aluminium Recycling</strong><br><br>
-                                    We accept aluminum cans and foil. Please rinse them before recycling.<br>
-                                    <em>Tip:</em> Crush cans to save space.<br>
-                                    <em>Impact:</em> Recycling aluminum saves 95% of the energy required to produce new aluminum.
-                                </div>
-                            </div>
-                            <div class="type-circle">
-                                <div class="hover-window window3">
-                                    <strong>Plastic Recycling</strong><br><br>
-                                    We accept plastic bottles, containers, and bags. Ensure they are rinsed and free of food residue.<br>
-                                    <em>Tip:</em> Remove caps from bottles for easier recycling.<br>
-                                    <em>Impact:</em> Recycling plastic reduces the amount of waste in our oceans.
-                                </div>
-                            </div>
-                        </div>
 
                     </div>
                     <div class="schedule">
