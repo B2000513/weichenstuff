@@ -10,149 +10,133 @@ if (!isset($_SESSION['username'])) {
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
+<<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Report an Issue</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/reportIssue.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lucida Consol&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lucida+Console&display=swap">
 
+    <!-- Font Awesome -->
     <script src="https://kit.fontawesome.com/bbf63d7a1f.js" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
 </head>
 
 <body>
-
-    <div class="container">
-        <aside class="sidebar">
-            <div class="logo">
-                <img src="image/wasteX1.png" alt="Logo">
-            </div>
-            <?php
-            include 'nav.php';
-            ?>
-        </aside>
-        <main class="main-content">
-            <form class="report-form" id="form" method="post" action="php/functions.php?op=issueReport" enctype="multipart/form-data">
-                <div class="banner">
-                    <h2>Every report matters. How can we help you?</h2>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <aside class="col-md-3 col-lg-2 bg-dark text-light p-3">
+                <div class="logo text-center mb-4">
+                    <img src="image/wasteX1.png" alt="Logo" class="img-fluid">
                 </div>
+                <?php include 'nav.php'; ?>
+            </aside>
 
-                <div class="icon-container">
-                    <div class="icon-box" data-value="missed_pickup">
-                        <img src="image/missed_pickup.png" alt="Missed Pickup">
-                        <p>Missed PickUp</p>
-                    </div>
-                    <div class="icon-box" data-value="overflowing">
-                        <img src="image/overflow.png" alt="Overflowing Bin">
-                        <p>Overflowing Bin</p>
-                    </div>
-                    <div class="icon-box" data-value="dumping">
-                        <img src="image/dumping.png" alt="Illegal Dumping">
-                        <p>Illegal Dumping</p>
-                    </div>
-                    <div class="icon-box" data-value="others">
-                        <img src="image/feedback.png" alt="Others">
-                        <p>Others</p>
-                    </div>
-                </div>
-                <input type="hidden" id="selectedOption" name="selectedOption" value="">
-                <div class="input-container">
-                    <label for="photoUpload">Upload a Photo (optional)</label>
-                    <span class="semi">:</span>
-                    <div class="file-upload-wrapper">
-                        <input type="file" id="photoUpload" name="photoUpload" accept=".jpg, .jpeg, .png, image/*">
-                        <span class="remove-file" id="removeFile">&times;</span>
+            <!-- Main Content -->
+            <main class="col-md-9 col-lg-10 p-4">
+                <form id="form" method="post" action="php/functions.php?op=issueReport" enctype="multipart/form-data" class="p-4 shadow-sm rounded bg-white">
+                    <div class="text-center mb-4">
+                        <h2>Every report matters. How can we help you?</h2>
                     </div>
 
-                </div>
-                <div class="input-container">
-                    <label for="description">Description</label>
-                    <span class="semi">:</span>
-                    <textarea type="text" id="description" placeholder="Enter your details here" name="description" required></textarea>
-                </div>
+                    <!-- Icon Container -->
+                    <div class="row text-center mb-4">
+                        <div class="col-6 col-md-3">
+                            <div class="icon-box border p-3 rounded" data-value="missed_pickup">
+                                <img src="image/missed_pickup.png" alt="Missed Pickup" class="img-fluid mb-2">
+                                <p>Missed PickUp</p>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <div class="icon-box border p-3 rounded" data-value="overflowing">
+                                <img src="image/overflow.png" alt="Overflowing Bin" class="img-fluid mb-2">
+                                <p>Overflowing Bin</p>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <div class="icon-box border p-3 rounded" data-value="dumping">
+                                <img src="image/dumping.png" alt="Illegal Dumping" class="img-fluid mb-2">
+                                <p>Illegal Dumping</p>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <div class="icon-box border p-3 rounded" data-value="others">
+                                <img src="image/feedback.png" alt="Others" class="img-fluid mb-2">
+                                <p>Others</p>
+                            </div>
+                        </div>
+                    </div>
 
-                <div class="input-container">
-                    <label for="location">Location</label>
-                    <span class="semi">:</span>
-                    <input type="text" id="location" placeholder="Enter your location here" name="location" required>
-                </div>
+                    <!-- Hidden input for icon selection -->
+                    <input type="hidden" id="selectedOption" name="selectedOption">
 
-                <div class="input-container">
-                    <label for="date">Date</label>
-                    <span class="semi">:</span>
-                    <input type="date" id="date" placeholder="Choose your date here" name="date" required>
-                </div>
+                    <!-- File Upload -->
+                    <div class="form-group">
+                        <label for="photoUpload">Upload a Photo (optional)</label>
+                        <input type="file" class="form-control-file" id="photoUpload" name="photoUpload" accept=".jpg, .jpeg, .png, image/*">
+                    </div>
 
-                <div class="submit-container">
-                    <button type="submit" class="submit-btn">Submit</button>
-                </div>
-            </form>
-            <?php
-            if (isset($_GET['op'])) {
-                $date = $_GET['op'];
-                echo '<input type="hidden" id="hiddenDate" name="date" value="' . $date . '">';
-            }
-            ?>
+                    <!-- Description -->
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <textarea class="form-control" id="description" placeholder="Enter your details here" name="description" required></textarea>
+                    </div>
 
+                    <!-- Location -->
+                    <div class="form-group">
+                        <label for="location">Location</label>
+                        <input type="text" class="form-control" id="location" placeholder="Enter your location here" name="location" required>
+                    </div>
 
-        </main>
+                    <!-- Date -->
+                    <div class="form-group">
+                        <label for="date">Date</label>
+                        <input type="date" class="form-control" id="date" name="date" required>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
+
+                <?php
+                if (isset($_GET['op'])) {
+                    $date = $_GET['op'];
+                    echo '<input type="hidden" id="hiddenDate" name="date" value="' . $date . '">';
+                }
+                ?>
+            </main>
+        </div>
     </div>
 
+    <!-- JavaScript -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    
     <script>
+        // JavaScript code for icon selection and other functionalities
         const iconBoxes = document.querySelectorAll('.icon-box');
         const selectedOption = document.getElementById('selectedOption');
 
-
         iconBoxes.forEach(box => {
             box.addEventListener('click', function() {
-                // Remove 'active' class from all icon boxes
-                if (this.classList.contains('active')) {
-                    iconBoxes.forEach(b => b.classList.remove('active'));
-                    selectedOption.value = '';
-                } else {
-                    iconBoxes.forEach(b => b.classList.remove('active'));
+                iconBoxes.forEach(b => b.classList.remove('active'));
+                if (!this.classList.contains('active')) {
                     this.classList.add('active');
                     selectedOption.value = this.dataset.value;
+                } else {
+                    selectedOption.value = '';
                 }
                 console.log(selectedOption.value);
             });
         });
-    </script>
 
-    <script>
-        const datePicker = document.getElementById('date');
-
-
-        // const today = new Date();
-
-
-        // const tomorrow = new Date(today);
-        // tomorrow.setDate(today.getDate() + 1); 
-
-        // // Format the date as yyyy-mm-dd
-        // const year = tomorrow.getFullYear();
-        // const month = String(tomorrow.getMonth() + 1).padStart(2, '0'); 
-        // const day = String(tomorrow.getDate()).padStart(2, '0');
-
-        // const minDate = `${year}-${month}-${day}`;
-
-
-        // datePicker.setAttribute('min', minDate);
-        datePicker.addEventListener('click', () => {
-            datePicker.showPicker();
-        });
-    </script>
-
-    <script>
-        const hiddenDateInput = document.getElementById('hiddenDate');
-        const dateInput = document.getElementById('date');
-        if (hiddenDateInput) {
-            dateInput.value = hiddenDateInput.value;
-        }
-    </script>
-
-    <script>
+        // File upload and clear functionality
         const photoUpload = document.getElementById('photoUpload');
         const removeFile = document.getElementById('removeFile');
 
@@ -166,9 +150,8 @@ if (!isset($_SESSION['username'])) {
             photoUpload.value = '';
             removeFile.style.display = 'none';
         });
-    </script>
 
-    <script>
+        // Form validation
         const form = document.getElementById('form');
         form.addEventListener('submit', function(event) {
             if (selectedOption.value == '') {
@@ -177,8 +160,7 @@ if (!isset($_SESSION['username'])) {
             }
         });
     </script>
-
-
 </body>
+
 
 </html>
