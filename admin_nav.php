@@ -4,16 +4,46 @@ $currentPage = basename($_SERVER['PHP_SELF']);
 ?>
 
 
+<style>
+    .logout {
+        margin-top: 70px;
+    }
+</style>
 
 <div class="sidebar">
-    <div class="logo">
-        <img src="image/wasteX1.png" alt="Logo">
+    <div class="container">
     </div>
-    <nav class="navbar">
-        <a href="admin_dashboard.php" class="nav-btn <?php echo ($currentPage == 'admin_dashboard.php') ? 'active' : ''; ?>">Dashboard</a>
-        <a href="admin_overview.php" class="nav-btn <?php echo ($currentPage == 'admin_overview.php') ? 'active' : ''; ?>">Reports</a>
-        <a href="admin_announcement.php" class="nav-btn <?php echo ($currentPage == 'admin_announcement.php') ? 'active' : ''; ?>">Announcement</a>
-        <a href="admin_schedule.php" class="nav-btn <?php echo ($currentPage == 'admin_schedule.php') ? 'active' : ''; ?>">Waste Schedule</a>
-        <a href="php/functions.php?op=signOut" class="nav-btn logout">Logout</a>
+    <nav class="menu">
+        <ul>
+            <li>
+                <p class="title"> Wastex </p>
+            </li>
+            <li>
+                <a href="admin_dashboard.php" class="<?php echo ($currentPage == 'admin_dashboard.php') ? 'active' : ''; ?>">
+                    <i class="fa fa-home"></i><span>Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="admin_schedule.php" class="<?php echo ($currentPage == 'admin_schedule.php') ? 'active' : ''; ?>">
+                    <i class="fa fa-calendar-check"></i><span>Schedule Pickup</span>
+                </a>
+            </li>
+            <li>
+                <a href="admin_overview.php" class="<?php echo ($currentPage == 'admin_overview.php') ? 'active' : ''; ?>">
+                    <i class="fa fa-file-text"></i><span>Report Issues</span>
+                </a>
+            </li>
+            <li>
+                <a href="admin_announcement.php" class="<?php echo ($currentPage == 'admin_announcement.php') ? 'active' : ''; ?>">
+                    <i class="fa fa-bell"></i><span>Announcement</span>
+                </a>
+            </li>
+
+            <li class="logout">
+                <a href="php/functions.php?op=signOut">
+                    <i class="fa fa-sign-out"></i><span>Logout</span>
+                </a>
+            </li>
+        </ul>
     </nav>
 </div>

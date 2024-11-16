@@ -17,6 +17,9 @@ if (!isset($_SESSION['username'])) {
   <title>Announcement</title>
   <link rel="stylesheet" href="css/admin_announcement.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lucida Consol&display=swap">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 
 </head>
 
@@ -29,129 +32,75 @@ if (!isset($_SESSION['username'])) {
     ?>
 
     <div class="content">
-      <div class="announcement-container">
-        <div class="admin-panel">
-          <div class="add_wording">
-            <h3>Add Announcement</h3>
-          </div>
-          <form id="announcementForm" method="post" action="php/functions.php?op=add_announcement" enctype="multipart/form-data">
-            <div class="input-group">
-              <label for="title">Title</label>
-              <input type="text" id="title" name="title" placeholder="Enter title" required />
+      <div class="announcement-container row">
+        <!-- Add Announcement Panel -->
+        <div class="col-sm-12 col-md-6">
+          <div class="admin-panel card p-4">
+            <h3 class="card-title mb-4">Add Announcement</h3>
+            <form id="announcementForm" method="post" action="php/functions.php?op=add_announcement" enctype="multipart/form-data">
+              <div class="mb-3">
+                <label for="title" class="form-label">Title</label>
+                <input type="text" id="title" name="title" class="form-control" placeholder="Enter title" required />
+              </div>
 
-            </div>
-            <div class="input-group">
-              <label for="image">Image</label>
-              <input type="file" id="image" name="image" accept=".jpg, .jpeg, .png, image/*">
-            </div>
-            <div class="input-group">
-              <label for="content">Content</label>
-              <textarea id="content" name="content" placeholder="Enter announcement details" required></textarea>
-            </div>
-            <button type="submit">Add</button>
-          </form>
+              <div class="mb-3">
+                <label for="image" class="form-label">Image</label>
+                <input type="file" id="image" name="image" class="form-control" accept=".jpg, .jpeg, .png" />
+              </div>
+
+              <div class="mb-3">
+                <label for="content" class="form-label">Content</label>
+                <textarea id="content" name="content" class="form-control" placeholder="Enter announcement details" required></textarea>
+              </div>
+
+              <button type="submit" class="btn btn-primary">Add</button>
+            </form>
+          </div>
         </div>
 
-        <div class="announcement-list">
-          <div class="all_anno">
-            <h1>All Annoucements</h3>
-          </div>
-          <div class="list-header">
-            <span>Name</span>
-            <select id="sortDropdown" onchange="sortAnnouncements()">
-              <option value="desc">Latest to Oldest</option>
-              <option value="asc">Oldest to Latest</option>
-            </select>
+        <!-- Announcement List Panel -->
+        <div class="col-sm-12 col-md-6">
+          <div class="announcement-list card p-4">
+            <h1 class="card-title mb-4">All Announcements</h1>
+            <div class="list-header d-flex justify-content-between align-items-center mb-3">
+              <span class="h5">Announcements</span>
+              <select id="sortDropdown" class="form-select" onchange="sortAnnouncements()">
+                <option value="desc">Latest to Oldest</option>
+                <option value="asc">Oldest to Latest</option>
+              </select>
+            </div>
 
+            <ul id="announcementDisplay" class="list-group"></ul>
+            <button id="showMoreBtn" onclick="showMore()" class="btn btn-secondary mt-3">Show More</button>
           </div>
-          <ul id="announcementDisplay"></ul>
-          <button id="showMoreBtn" onclick="showMore()">Show More</button>
         </div>
       </div>
-
     </div>
   </div>
 
-  <div id="announcementModal" class="modal">
-    <div class="modal-content">
-      <span class="close-btn" onclick="closeModal()">&times;</span>
-      <h2 id="modalTitle"></h2>
-      <p id="modalDate"></p> <!-- Add a paragraph to display the date -->
-      <img id="modalImage" src="" alt="Announcement Image" style="display:none;">
-      <p id="modalContent"></p>
+  <!-- Modal for Viewing Announcement -->
+  <div id="announcementModal" class="modal fade" tabindex="-1" aria-labelledby="announcementModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalTitle"></h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p id="modalDate" class="text-muted"></p>
+          <img id="modalImage" src="" alt="Announcement Image" class="img-fluid mb-3" style="display:none;" />
+          <p id="modalContent"></p>
+        </div>
+      </div>
     </div>
   </div>
+
+  <!-- Bootstrap JS (Required for Modal and other interactions) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
 
 
   <script>
-    //     let announcements = [
-    //     { 
-    //         title: "University 1", 
-    //         content: "Join us for a university-wide event on October 15, 2024. Free snacks and fun activities for all attendees!",
-    //         date: "2024-10-01", 
-    //         image: null 
-    //     },
-    //     { 
-    //         title: "New Library 2", 
-    //         content: "Starting from September 28, the library will be open from 7 AM to 10 PM every day.",
-    //         date: "2024-09-01", 
-    //         image: null 
-    //     },
-    //     { 
-    //         title: "Workshop on AI3", 
-    //         content: "Attend a hands-on workshop on Artificial Intelligence and Machine Learning this Friday.",
-    //         date: "2024-09-02", 
-    //         image: null 
-    //     },
-    //     { 
-    //         title: "Exam Schedule Released4", 
-    //         content: "The final exam schedule has been posted. Check the university portal for details.The final exam schedule has been posted. Check the university portal for details.The final exam schedule has been posted. Check the university portal for details.The final exam schedule has been posted. Check the university portal for details.The final exam schedule has been posted. Check the university portal for details.",
-    //         date: "2024-09-03", 
-    //         image: null 
-    //     },
-    //     { 
-    //         title: "Health and Safety Guidelines5", 
-    //         content: "Please follow the updated health and safety guidelines during the flu season.",
-    //         date: "2024-09-04", 
-    //         image: null 
-    //     },
-    //     { 
-    //         title: "Health and Safety Guidelines6", 
-    //         content: "Please follow the updated health and safety guidelines during the flu season.",
-    //         date: "2024-09-05", 
-    //         image: null 
-    //     },
-    //     { 
-    //         title: "Health and Safety Guidelines7", 
-    //         content: "Please follow the updated health and safety guidelines during the flu season.",
-    //         date: "2024-09-06", 
-    //         image: null 
-    //     },
-    //     { 
-    //         title: "Health and Safety Guidelines8", 
-    //         content: "Please follow the updated health and safety guidelines during the flu season.",
-    //         date: "2024-09-07", 
-    //         image: null 
-    //     },
-    //     { 
-    //         title: "Health and Safety Guidelines9", 
-    //         content: "Please follow the updated health and safety guidelines during the flu season.",
-    //         date: "2024-09-08", 
-    //         image: null 
-    //     },
-    //     { 
-    //         title: "Health and Safety Guidelines10", 
-    //         content: "Please follow the updated health and safety guidelines during the flu season.",
-    //         date: "2024-09-09", 
-    //         image: null 
-    //     },
-    //     { 
-    //         title: "Health and Safety Guidelines11", 
-    //         content: "Please follow the updated health and safety guidelines during the flu season.",
-    //         date: "2024-09-10", 
-    //         image: null 
-    //     }
-    // ];
     let announcements = [];
     async function fetchAnnouncements() {
       try {
