@@ -6,8 +6,25 @@
 
 html, body {
     height: 100%;
+    margin:0;
 }
 
+aside {
+    height: 100vh; 
+    position: fixed; 
+    top: 0;
+    left: 0;
+    width: 240px; 
+    z-index: 1000;
+}
+
+main {
+    width:82% !important;
+    margin-left: 240px; /* Offset main content to the right to avoid overlap with sidebar */
+    padding: 20px;
+    height: 100vh; /* Make sure main content takes full height */
+    overflow-y: auto; /* Allow scrolling if content overflows */
+}
 
 body {
     /* font-family: 'Arial', sans-serif; */
@@ -76,7 +93,6 @@ body {
 .menu ul li a {
     text-decoration: none;
     color: #f2f2f2;
-    font-size: 20px;
     display: flex;
     align-items: center;
 }
@@ -229,6 +245,7 @@ body {
 }
 
 .generateBtn{
+    width:96%;
     position: absolute;
     bottom: 15px;
     border-radius: 15px;
