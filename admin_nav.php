@@ -15,7 +15,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
     </div>
     <nav class="menu">
         <ul>
-            <li>
+            <li> 
                 <p class="title"> Wastex </p>
             </li>
             <li>
@@ -29,8 +29,13 @@ $currentPage = basename($_SERVER['PHP_SELF']);
                 </a>
             </li>
             <li>
-                <a href="admin_overview.php" class="<?php echo ($currentPage == 'admin_overview.php') ? 'active' : ''; ?>">
-                    <i class="fa fa-file-text"></i><span>Report Issues</span>
+                <a href="admin_report.php" class="<?php echo ($currentPage == 'admin_report.php') ? 'active' : ''; ?>">
+                    <i class="fa fa-file"></i><span>Report</span>
+                </a>
+            </li>
+            <li>
+                <a href="admin_issue.php" class="<?php echo ($currentPage == 'admin_issue.php') ? 'active' : ''; ?>">
+                    <i class="fa fa-file-text"></i><span>Manage Issue</span>
                 </a>
             </li>
             <li>
@@ -38,7 +43,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
                     <i class="fa fa-bell"></i><span>Announcement</span>
                 </a>
             </li>
-
+           
             <li class="logout">
                 <a href="php/functions.php?op=signOut">
                     <i class="fa fa-sign-out"></i><span>Logout</span>
