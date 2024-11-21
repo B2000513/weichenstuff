@@ -20,29 +20,29 @@ if (!isset($_SESSION['username'])) {
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 
-<?php
-global $dbConnection;
-$email = $_SESSION['username'];
-$sql = "SELECT comID FROM user WHERE userEmail = '$email'";
-$result = mysqli_query($dbConnection, $sql);
-$row = mysqli_fetch_assoc($result);
-$comID = $row['comID'];
-
-$days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
-$timeSlots = [];
-
-foreach ($days as $day) {
-    // Query to check the available time slots for each day
-    $sql = "SELECT * FROM schedule WHERE comID = '$comID' AND scheDay = '$day'";
+<?php 
+    global $dbConnection;
+    $email = $_SESSION['username'];
+    $sql = "SELECT comID FROM user WHERE userEmail = '$email'";
     $result = mysqli_query($dbConnection, $sql);
-    $timeSlots[$day] = mysqli_num_rows($result);
-}
+    $row = mysqli_fetch_assoc($result);
+    $comID = $row['comID'];
+
+    $days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+    $timeSlots = [];
+    
+    foreach ($days as $day) {
+        // Query to check the available time slots for each day
+        $sql = "SELECT * FROM schedule WHERE comID = '$comID' AND scheDay = '$day'";
+        $result = mysqli_query($dbConnection, $sql);
+        $timeSlots[$day] = mysqli_num_rows($result); 
+    }
 ?>
 
 <body>
     <div class="container">
         <?php
-        include 'admin_nav.php';
+            include 'admin_nav.php';
         ?>
         <div class="content">
             <div class="schedule-title">
@@ -52,10 +52,10 @@ foreach ($days as $day) {
                 <div class="col-md-3">
                     <section class="days-selector">
                         <?php foreach ($days as $day): ?>
-                            <button class="day-btn"
-                                onclick="showSchedule('<?php echo $day; ?>', this)"
-                                <?php echo $timeSlots[$day] == 0 ? 'disabled' : ''; ?>>
-                                <?php echo ucfirst($day); ?>
+                            <button class="day-btn" 
+                                    onclick="showSchedule('<?php echo $day; ?>', this)"
+                                    <?php echo $timeSlots[$day] == 0 ? 'disabled' : ''; ?>>
+                                    <?php echo ucfirst($day); ?>
                             </button>
                         <?php endforeach; ?>
                         <button class="day-btn" onclick="showSchedule('all', this)">All</button>
@@ -67,106 +67,106 @@ foreach ($days as $day) {
                         <div id="monday" class="schedule-day">
                             <h3>Monday</h3>
                             <?php
-                            $sql2 = "SELECT * FROM schedule WHERE comID = '$comID' AND scheDay = 'Monday'";
-                            $result2 = mysqli_query($dbConnection, $sql2);
-                            if (mysqli_num_rows($result2) > 0) {
-                                while ($row = mysqli_fetch_assoc($result2)) {
-                                    echo '<div class="time-slot" data-value="' . $row['scheduleID'] . '" onclick="selectTimeSlot(this)">' . $row['scheTime'] . '</div>';
+                                $sql2 = "SELECT * FROM schedule WHERE comID = '$comID' AND scheDay = 'Monday'";
+                                $result2 = mysqli_query($dbConnection, $sql2);
+                                if (mysqli_num_rows($result2) > 0) {
+                                    while ($row = mysqli_fetch_assoc($result2)) {
+                                        echo '<div class="time-slot" data-value="' . $row['scheduleID'] . '" onclick="selectTimeSlot(this)">' . $row['scheTime'] . '</div>';
+                                    }
+                                } else {
+                                    echo '<div class="no-time">---- No time slot on Monday ----</div>';
                                 }
-                            } else {
-                                echo '<div class="no-time">---- No time slot on Monday ----</div>';
-                            }
-                            ?>
+                            ?>                                
                         </div>
 
                         <!-- Tuesday Schedule -->
                         <div id="tuesday" class="schedule-day">
                             <h3>Tuesday</h3>
                             <?php
-                            $sql2 = "SELECT * FROM schedule WHERE comID = '$comID' AND scheDay = 'Tuesday'";
-                            $result2 = mysqli_query($dbConnection, $sql2);
-                            if (mysqli_num_rows($result2) > 0) {
-                                while ($row = mysqli_fetch_assoc($result2)) {
-                                    echo '<div class="time-slot" data-value="' . $row['scheduleID'] . '" onclick="selectTimeSlot(this)">' . $row['scheTime'] . '</div>';
+                                $sql2 = "SELECT * FROM schedule WHERE comID = '$comID' AND scheDay = 'Tuesday'";
+                                $result2 = mysqli_query($dbConnection, $sql2);
+                                if (mysqli_num_rows($result2) > 0) {
+                                    while ($row = mysqli_fetch_assoc($result2)) {
+                                        echo '<div class="time-slot" data-value="' . $row['scheduleID'] . '" onclick="selectTimeSlot(this)">' . $row['scheTime'] . '</div>';
+                                    }
+                                } else {
+                                    echo '<div class="no-time">---- No time slot on Tuesday ----</div>';
                                 }
-                            } else {
-                                echo '<div class="no-time">---- No time slot on Tuesday ----</div>';
-                            }
                             ?>
                         </div>
 
                         <div id="wednesday" class="schedule-day">
                             <h3>Wednesday</h3>
                             <?php
-                            $sql2 = "SELECT * FROM schedule WHERE comID = '$comID' AND scheDay = 'Wednesday'";
-                            $result2 = mysqli_query($dbConnection, $sql2);
-                            if (mysqli_num_rows($result2) > 0) {
-                                while ($row = mysqli_fetch_assoc($result2)) {
-                                    echo '<div class="time-slot" data-value="' . $row['scheduleID'] . '" onclick="selectTimeSlot(this)">' . $row['scheTime'] . '</div>';
+                                $sql2 = "SELECT * FROM schedule WHERE comID = '$comID' AND scheDay = 'Wednesday'";
+                                $result2 = mysqli_query($dbConnection, $sql2);
+                                if (mysqli_num_rows($result2) > 0) {
+                                    while ($row = mysqli_fetch_assoc($result2)) {
+                                        echo '<div class="time-slot" data-value="' . $row['scheduleID'] . '" onclick="selectTimeSlot(this)">' . $row['scheTime'] . '</div>';
+                                    }
+                                } else {
+                                    echo '<div class="no-time">----   No time slot on Wednesday   ----</div>';
                                 }
-                            } else {
-                                echo '<div class="no-time">----   No time slot on Wednesday   ----</div>';
-                            }
                             ?>
                         </div>
 
                         <div id="thursday" class="schedule-day">
                             <h3>Thursday</h3>
                             <?php
-                            $sql2 = "SELECT * FROM schedule WHERE comID = '$comID' AND scheDay = 'Thursday'";
-                            $result2 = mysqli_query($dbConnection, $sql2);
-                            if (mysqli_num_rows($result2) > 0) {
-                                while ($row = mysqli_fetch_assoc($result2)) {
-                                    echo '<div class="time-slot" data-value="' . $row['scheduleID'] . '" onclick="selectTimeSlot(this)">' . $row['scheTime'] . '</div>';
+                                $sql2 = "SELECT * FROM schedule WHERE comID = '$comID' AND scheDay = 'Thursday'";
+                                $result2 = mysqli_query($dbConnection, $sql2);
+                                if (mysqli_num_rows($result2) > 0) {
+                                    while ($row = mysqli_fetch_assoc($result2)) {
+                                        echo '<div class="time-slot" data-value="' . $row['scheduleID'] . '" onclick="selectTimeSlot(this)">' . $row['scheTime'] . '</div>';
+                                    }
+                                } else {
+                                    echo '<div class="no-time">----   No time slot on Thursday   ----</div>';
                                 }
-                            } else {
-                                echo '<div class="no-time">----   No time slot on Thursday   ----</div>';
-                            }
                             ?>
                         </div>
 
                         <div id="friday" class="schedule-day">
                             <h3>Friday</h3>
                             <?php
-                            $sql2 = "SELECT * FROM schedule WHERE comID = '$comID' AND scheDay = 'Friday'";
-                            $result2 = mysqli_query($dbConnection, $sql2);
-                            if (mysqli_num_rows($result2) > 0) {
-                                while ($row = mysqli_fetch_assoc($result2)) {
-                                    echo '<div class="time-slot" data-value="' . $row['scheduleID'] . '" onclick="selectTimeSlot(this)">' . $row['scheTime'] . '</div>';
+                                $sql2 = "SELECT * FROM schedule WHERE comID = '$comID' AND scheDay = 'Friday'";
+                                $result2 = mysqli_query($dbConnection, $sql2);
+                                if (mysqli_num_rows($result2) > 0) {
+                                    while ($row = mysqli_fetch_assoc($result2)) {
+                                        echo '<div class="time-slot" data-value="' . $row['scheduleID'] . '" onclick="selectTimeSlot(this)">' . $row['scheTime'] . '</div>';
+                                    }
+                                } else {
+                                    echo '<div class="no-time">----   No time slot on Friday   ----</div>';
                                 }
-                            } else {
-                                echo '<div class="no-time">----   No time slot on Friday   ----</div>';
-                            }
                             ?>
                         </div>
 
                         <div id="saturday" class="schedule-day">
                             <h3>Saturday</h3>
                             <?php
-                            $sql2 = "SELECT * FROM schedule WHERE comID = '$comID' AND scheDay = 'Saturday'";
-                            $result2 = mysqli_query($dbConnection, $sql2);
-                            if (mysqli_num_rows($result2) > 0) {
-                                while ($row = mysqli_fetch_assoc($result2)) {
-                                    echo '<div class="time-slot" data-value="' . $row['scheduleID'] . '" onclick="selectTimeSlot(this)">' . $row['scheTime'] . '</div>';
+                                $sql2 = "SELECT * FROM schedule WHERE comID = '$comID' AND scheDay = 'Saturday'";
+                                $result2 = mysqli_query($dbConnection, $sql2);
+                                if (mysqli_num_rows($result2) > 0) {
+                                    while ($row = mysqli_fetch_assoc($result2)) {
+                                        echo '<div class="time-slot" data-value="' . $row['scheduleID'] . '" onclick="selectTimeSlot(this)">' . $row['scheTime'] . '</div>';
+                                    }
+                                } else {
+                                    echo '<div class="no-time">----   No time slot on Saturday   ----</div>';
                                 }
-                            } else {
-                                echo '<div class="no-time">----   No time slot on Saturday   ----</div>';
-                            }
                             ?>
                         </div>
 
                         <div id="sunday" class="schedule-day">
                             <h3>Sunday</h3>
                             <?php
-                            $sql2 = "SELECT * FROM schedule WHERE comID = '$comID' AND scheDay = 'Sunday'";
-                            $result2 = mysqli_query($dbConnection, $sql2);
-                            if (mysqli_num_rows($result2) > 0) {
-                                while ($row = mysqli_fetch_assoc($result2)) {
-                                    echo '<div class="time-slot" data-value="' . $row['scheduleID'] . '" onclick="selectTimeSlot(this)">' . $row['scheTime'] . '</div>';
+                                $sql2 = "SELECT * FROM schedule WHERE comID = '$comID' AND scheDay = 'Sunday'";
+                                $result2 = mysqli_query($dbConnection, $sql2);
+                                if (mysqli_num_rows($result2) > 0) {
+                                    while ($row = mysqli_fetch_assoc($result2)) {
+                                        echo '<div class="time-slot" data-value="' . $row['scheduleID'] . '" onclick="selectTimeSlot(this)">' . $row['scheTime'] . '</div>';
+                                    }
+                                } else {
+                                    echo '<div class="no-time">----   No time slot on Sunday   ----</div>';
                                 }
-                            } else {
-                                echo '<div class="no-time">----   No time slot on Sunday   ----</div>';
-                            }
                             ?>
                         </div>
                     </section>
@@ -190,7 +190,7 @@ foreach ($days as $day) {
 
                                 <div class="modal-buttons">
                                     <button type="submit">Add</button>
-                                    <button type=" button" onclick="closeModal()">Back</button>
+                                <button type=" button" onclick="closeModal()">Back</button>
                                 </div>
                             </form>
                         </div>
@@ -211,7 +211,7 @@ foreach ($days as $day) {
     <script>
         function showSchedule(day, element) {
             const scheduleDays = document.querySelectorAll('.schedule-day');
-
+            
             scheduleDays.forEach(function(dayDiv) {
                 if (day === 'all') {
                     if (dayDiv.querySelector('.time-slot') === null) {
@@ -312,6 +312,9 @@ foreach ($days as $day) {
                 closeModal();
             }
         };
+
+        
+
     </script>
 </body>
 
