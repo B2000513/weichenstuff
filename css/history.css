@@ -6,6 +6,32 @@
 
 html, body {
     height: 100%;
+    margin: 0;
+}
+
+/* Main container takes full height */
+.container-fluid {
+    height: 100%;
+    padding: 0; /* Remove padding around the container */
+}
+
+/* Sidebar adjustments */
+aside {
+    width:fit-content;
+    height: 100vh; 
+    position: fixed; 
+    top: 0;
+    left: 0;
+    width: 250px; 
+    z-index: 1000;
+}
+
+/* Main content area */
+main {
+    margin-left: 240px; 
+    padding: 20px;
+    height: 100vh; 
+    overflow-y: auto; 
 }
 
 
