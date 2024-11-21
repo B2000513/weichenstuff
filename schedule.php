@@ -22,6 +22,58 @@ if (!isset($_SESSION['username'])) {
     <!-- Font Awesome -->
     <script src="https://kit.fontawesome.com/bbf63d7a1f.js" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+    <style>
+        .card-img-top {
+            width: 80%;
+            max-height: 100px;
+            object-fit: contain; /* Ensures the aspect ratio is maintained */
+        }
+
+        /* Adjust card body for responsiveness */
+        .icon-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .icon-box .card-body {
+            padding-top:30px;
+            margin-top: -25px !important;
+            padding-bottom:0px !important;
+        }
+
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+
+        aside {
+            height: 100vh; 
+            position: fixed; 
+            top: 0;
+            left: 0;
+            width: 240px; 
+            z-index: 1000;
+        }
+
+        main {
+            max-width:100% !important;
+            flex:1 0 80% !important;
+            padding: 20px;
+            height: 100vh;
+        }
+
+        img.img-fluid {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .card {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+    </style>
 </head>
 
 <body>
