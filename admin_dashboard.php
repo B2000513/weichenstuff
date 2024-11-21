@@ -9,7 +9,6 @@ if (!isset($_SESSION['username'])) {
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,30 +18,30 @@ if (!isset($_SESSION['username'])) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 
-<?php
-global $dbConnection;
-$email = $_SESSION['username'];
-$sql = "SELECT comID,userFname FROM user WHERE userEmail = '$email'";
-$result = mysqli_query($dbConnection, $sql);
-$row = mysqli_fetch_assoc($result);
-$comID = $row['comID'];
+<?php 
+    global $dbConnection;
+    $email = $_SESSION['username'];
+    $sql = "SELECT comID,userFname FROM user WHERE userEmail = '$email'";
+    $result = mysqli_query($dbConnection, $sql);
+    $row = mysqli_fetch_assoc($result);
+    $comID = $row['comID'];
 
-$sql2 = "SELECT * FROM community WHERE comID = $comID";
-$result2 = mysqli_query($dbConnection, $sql2);
-$community = mysqli_fetch_assoc($result2);
+    $sql2 = "SELECT * FROM community WHERE comID = $comID";
+    $result2 = mysqli_query($dbConnection, $sql2);
+    $community = mysqli_fetch_assoc($result2);
 
-$sql3 = "SELECT * FROM user WHERE comID = '$comID'";
-$result3 = mysqli_query($dbConnection, $sql3);
+    $sql3 = "SELECT * FROM user WHERE comID = '$comID'";
+    $result3 = mysqli_query($dbConnection, $sql3);
 
-$counter = 1;
+    $counter = 1;
 
-$sql4 = "SELECT COUNT(*) AS total_members FROM user WHERE comID = ?";
-$stmt = mysqli_prepare($dbConnection, $sql4);
-mysqli_stmt_bind_param($stmt, 'i', $comID);
-mysqli_stmt_execute($stmt);
-mysqli_stmt_bind_result($stmt, $total_members);
-mysqli_stmt_fetch($stmt);
-mysqli_stmt_close($stmt);
+    $sql4 = "SELECT COUNT(*) AS total_members FROM user WHERE comID = ?";
+    $stmt = mysqli_prepare($dbConnection, $sql4);
+    mysqli_stmt_bind_param($stmt, 'i', $comID);
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_bind_result($stmt, $total_members);
+    mysqli_stmt_fetch($stmt);
+    mysqli_stmt_close($stmt);
 ?>
 
 <body>
@@ -50,11 +49,11 @@ mysqli_stmt_close($stmt);
 
 
         <?php
-        include 'admin_nav.php';
+            include 'admin_nav.php';
         ?>
 
         <div class="content">
-            <div class='dashboard-title'>
+            <div class='dashboard-title'> 
                 <h1> Dashboard </h1>
             </div>
             <div class="dashboard-content">
@@ -64,11 +63,11 @@ mysqli_stmt_close($stmt);
                     </div>
                     <div class="community-details">
                         <?php
-                        // Display community details
-                        echo "
-                            <p><strong>Community:</strong> {$community['comArea']}</p>
+                            // Display community details
+                            echo "
+                            <p><strong>Community Name:</strong> {$community['comArea']}</p>
                             <p><strong>Community State:</strong> {$community['comState']}</p>
-                            <p><strong>Created Date:</strong> {$community['createdDate']}</p>";
+                            <p><strong>Date:</strong> {$community['createdDate']}</p>";
                         ?>
                     </div>
                 </div>
@@ -84,15 +83,15 @@ mysqli_stmt_close($stmt);
                             <th>User Role</th>
                         </tr>
                         <?php
-                        while ($member = mysqli_fetch_assoc($result3)) {
-                            echo "<td>" . $counter . "</td>";
-                            echo "<td>" . htmlspecialchars($member['userFname']) . " " . htmlspecialchars($member['userLname']) . "</td>";
-                            echo "<td>" . htmlspecialchars($member['userEmail']) . "</td>";
-                            echo "<td>" . htmlspecialchars($member['userRole']) . "</td>";
-                            echo "</tr>";
+                            while ($member = mysqli_fetch_assoc($result3)) {
+                                echo "<td>" . $counter . "</td>"; 
+                                echo "<td>" . htmlspecialchars($member['userFname']) . " " . htmlspecialchars($member['userLname']) . "</td>";
+                                echo "<td>" . htmlspecialchars($member['userEmail']) . "</td>";
+                                echo "<td>" . htmlspecialchars($member['userRole']) . "</td>";
+                                echo "</tr>";
 
-                            $counter++;
-                        }
+                                $counter++;
+                            }
                         ?>
                     </table>
                 </div>
