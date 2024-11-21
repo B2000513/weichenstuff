@@ -25,7 +25,7 @@ if (!isset($_SESSION['username'])) {
     <div class="container-fluid">
         <div class="row">
             <!-- Sidebar -->
-            <aside class="col-md-3 col-lg-2 bg-dark text-light p-4">
+            <aside class="col-md-3 col-lg-2 bg-dark text-light p-3">
                 <div class="text-center mb-4">
                     <img src="image/wasteX1.png" alt="Logo" class="img-fluid" style="max-width: 150px;">
                 </div>
