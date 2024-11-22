@@ -16,6 +16,7 @@ if (!isset($_SESSION['username'])) {
     
         <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/reportIssue.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lucida+Console&display=swap">
 
@@ -83,7 +84,7 @@ if (!isset($_SESSION['username'])) {
         <!-- Sidebar -->
         <aside class="col-md-3 col-lg-2 bg-dark text-light p-3">
             <div class="text-center mb-4">
-                <img src="image/wasteX1.png" alt="Logo" class="img-fluid">
+                <p class="title"> Wastex </p>
             </div>
             <?php include 'nav.php'; ?>
         </aside>
