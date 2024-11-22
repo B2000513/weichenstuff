@@ -100,9 +100,9 @@ if ($_GET['op'] == 'updateUserDetails') {
     $lastName = $_POST['lastName'];
     $password = $_POST['password'];
     $contactNumber = $_POST['contactNumber'];
-    $address = $_POST['address'];
-    $city = $_POST['city'];
-    $state = $_POST['state'];
+    $address = $_POST['address']; // New
+    $city = $_POST['city'];       // New
+    $state = $_POST['state'];     // New
     $hashedPassword = password_hash($password, PASSWORD_DEFAULT); // Secure password
 
     $sql = "UPDATE user 

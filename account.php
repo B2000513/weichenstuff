@@ -62,7 +62,39 @@
                             <input type="tel" class="form-control" id="contactNumber" placeholder="Contact Number">
                         </div>
                     </div>
-                    <div class="row mt-4">
+                    
+                    <div class="row mb-3">
+    <div class="col">
+        <label for="address">Address</label>
+        <input type="text" class="form-control" id="address" placeholder="Address">
+    </div>
+    <div class="col">
+        <label for="city">City</label>
+        <input type="text" class="form-control" id="city" placeholder="City">
+    </div>
+</div>
+<div class="row mb-3">
+    <div class="col">
+        <label for="state">State</label>
+        <select class="form-control" name="state" id="state">
+                <option selected>State</option>
+                <option value="selangor">Selangor</option>
+                <option value="johor">Johor</option>
+                <option value="kedah">Kedah</option>
+                <option value="kelantan">Kelantan</option>
+                <option value="malacca">Malacca</option>
+                <option value="negeri_sembilan">Negeri Sembilan</option>
+                <option value="Pahang">Pahang</option>
+                <option value="perak">Perak</option>
+                <option value="perlis">Perlis</option>
+                <option value="penang">Penang</option>
+                <option value="sabah">Sabah</option>
+                <option value="sarawak">Sarawak</option>
+                <option value="terengganu">Terengganu</option>
+                </select>
+    </div>
+</div>
+<div class="row mt-4">
                         <div class="col d-flex justify-content-end gap-2">
                             <button type="button" class="btn btn-secondary">Cancel</button>
                             <button type="submit" class="btn btn-success">Save</button>
@@ -94,6 +126,9 @@
                         $('#lastName').val(response.lastName);
                         $('#email').val(response.email);
                         $('#contactNumber').val(response.contactNumber);
+                        $('#address').val(response.address); // New
+                        $('#city').val(response.city);       // New
+                        $('#state').val(response.state);     // New
                     },
                     error: function (xhr, status, error) {
                         alert('Error fetching user data.');
@@ -109,7 +144,10 @@
                     lastName: $('#lastName').val(),
                     password: $('#password').val(),
                     email: $('#email').val(),
-                    contactNumber: $('#contactNumber').val()
+                    contactNumber: $('#contactNumber').val(),
+                 address: $('#address').val(), // New
+                city: $('#city').val(),       // New
+                state: $('#state').val()      // New
                 };
 
                 $.ajax({
