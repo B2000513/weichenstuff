@@ -72,6 +72,57 @@ if ($_GET['op'] == 'userSignUp') {
     }
 }
 
+if ($_GET['op'] == 'getUserDetails') {
+    session_start();
+    $email = $_SESSION['username']; // Get the logged-in user's email
+
+    $sql = "SELECT userFname AS firstName, userLname AS lastName, userPwd AS password,
+                   userPhone AS contactNumber, userEmail AS email, userAddress AS address,
+                   userCity AS city, userState AS state, pwdStatus, userRole
+            FROM user
+            WHERE userEmail = '$email'";
+    
+    $result = mysqli_query($dbConnection, $sql);
+
+    if ($row = mysqli_fetch_assoc($result)) {
+        echo json_encode($row); // Send user details as JSON response
+    } else {
+        http_response_code(404);
+        echo json_encode(['error' => 'User not found.']);
+    }
+}
+
+if ($_GET['op'] == 'updateUserDetails') {
+    session_start();
+    $email = $_SESSION['username']; // Get the logged-in user's email
+
+    $firstName = $_POST['firstName'];
+    $lastName = $_POST['lastName'];
+    $password = $_POST['password'];
+    $contactNumber = $_POST['contactNumber'];
+    $address = $_POST['address'];
+    $city = $_POST['city'];
+    $state = $_POST['state'];
+    $hashedPassword = password_hash($password, PASSWORD_DEFAULT); // Secure password
+
+    $sql = "UPDATE user 
+            SET userFname = '$firstName', userLname = '$lastName',
+                userPwd = '$hashedPassword', userPhone = '$contactNumber',
+                userAddress = '$address', userCity = '$city', userState = '$state'
+            WHERE userEmail = '$email'";
+
+    if (mysqli_query($dbConnection, $sql)) {
+        echo json_encode(['message' => 'User details updated successfully.']);
+    } else {
+        http_response_code(500);
+        echo json_encode(['error' => 'Failed to update user details.']);
+    }
+}
+
+
+
+
+
 if ($_GET['op'] == 'adminSignup') {
 
     $fname = $_POST['fname'];
