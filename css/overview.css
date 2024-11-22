@@ -9,21 +9,22 @@ html, body {
     margin:0;
 }
 
+/* Sidebar adjustments */
 aside {
-    height: 100vh; 
-    position: fixed; 
-    top: 0;
-    left: 0;
-    width: 240px; 
-    z-index: 1000;
+    min-height: 100vh;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
 }
 
+aside img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Main content adjustments */
 main {
-    width:82% !important;
-    margin-left: 240px; /* Offset main content to the right to avoid overlap with sidebar */
-    padding: 20px;
-    height: 100vh; /* Make sure main content takes full height */
-    overflow-y: auto; /* Allow scrolling if content overflows */
+    padding: 2rem;
+    background-color: #f8f9fa; /* Light gray background for contrast */
 }
 
 body {
@@ -590,3 +591,4 @@ body {
         width: 50%;
     }
 }
+

@@ -47,8 +47,6 @@ if (!isset($_SESSION['username'])) {
                             <i class="fa-solid fa-bell"></i>
                             <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">3</span>
                         </button>
-                        <img src="image/handsome.jpeg" alt="Profile Picture" class="rounded-circle me-2" style="width: 40px; height: 40px;">
-                        <p class="mb-0">Hello wei chen</p>
                     </div>
                 </header>
 
@@ -103,8 +101,7 @@ if (!isset($_SESSION['username'])) {
             dateFormat: "Y-m-d",
             minDate: "2000-01-01"
         });
-    </script>
-    <script>
+
         let myChart;
         let myChart2;
 
@@ -128,6 +125,10 @@ if (!isset($_SESSION['username'])) {
                 document.getElementById("curve_chart").style.display = "none";
                 document.getElementById("statistics2").style.display = "none";
                 document.getElementById("statistics").classList.remove("d-none");
+
+                if (myChart) {
+                 myChart.destroy(); // Destroy the existing chart to avoid conflicts
+                }
 
                 $.ajax({
                     url: 'php/functions.php?op=userPickupStatistics',
@@ -157,8 +158,90 @@ if (!isset($_SESSION['username'])) {
                         console.error(error);
                     }
                 });
+            } else if (reportType === "Rate of Recycling") {
+                if (!dateRange.includes('to')) {
+                    alert("Select date range instead of a single date.");
+                    return;
+                }
+                document.getElementById("message").style.display = "none";
+                document.getElementById("message2").style.display = "none";
+                document.getElementById("statistics").style.display = "none";
+                document.getElementById("statistics2").style.display = "none";
+                document.getElementById("curve_chart").classList.remove("d-none");
+
+            
+                $.ajax({
+                    url: 'php/functions.php?op=userRateOfRecycling',
+                    type: 'GET',
+                    data: { dateRange: dateRange },
+                    dataType: 'json',
+                    success: function(response) {
+                        var recyclingData = response.recyclingData;
+                        var result = response.result;
+
+                        google.charts.load('current', { 'packages': ['corechart'] });
+                        google.charts.setOnLoadCallback(function() {
+                            drawChart(recyclingData);
+                        });
+
+                        if (result == 'noData') {
+                            document.getElementById("message2").classList.remove("d-none");
+                            document.getElementById("curve_chart").classList.add("d-none");
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(error);
+                    }
+                });
+
+                function drawChart(recyclingData) {
+                    var data = new google.visualization.DataTable();
+                    data.addColumn('number', 'Week');
+                    data.addColumn('number', 'ROR');
+
+                    data.addRows(recyclingData);
+
+                    const options = { title: 'Recycling Rate', hAxis: { title: 'Week' }, vAxis: { title: 'Rate of Recycling' }, legend: 'none' };
+                    const chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+                    chart.draw(data, options);
+                }
+            } else if (reportType === "Issue Reported") {
+                document.getElementById("message").style.display = "none";
+                document.getElementById("message2").style.display = "none";
+                document.getElementById("curve_chart").style.display = "none";
+                document.getElementById("statistics2").classList.remove("d-none");
+                document.getElementById("statistics").style.display = "none";
+
+                $.ajax({
+                    url: 'php/functions.php?op=userIssueReported',
+                    type: 'GET',
+                    data: { dateRange: dateRange },
+                    dataType: 'json',
+                    success: function(response) {
+                        var xValues = ["Missed Pickup", "Other Issue"];
+                        var yValues = response.yValues;
+                        var result = response.result;
+                        var barColors = ["#FF6565", "#FAAA0C"];
+
+                        if (myChart2){
+                             myChart2.destroy(); // Destroy the existing chart to avoid conflicts
+                        }
+                        myChart2 = new Chart("myChart2", {
+                            type: "bar",
+                            data: { labels: xValues, datasets: [{ backgroundColor: barColors, data: yValues }] },
+                            options: { title: { display: true, text: "Issues Reported" }, legend: { display: true, position: 'right' } }
+                        });
+
+                        if (result == 'noData') {
+                            document.getElementById("message2").classList.remove("d-none");
+                            document.getElementById("statistics2").classList.add("d-none");
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(error);
+                    }
+                });
             }
-            // Similarly implement the remaining report types (Rate of Recycling, Issue Reported)...
         });
     </script>
 </body>
