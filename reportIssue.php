@@ -47,25 +47,25 @@ if (!isset($_SESSION['username'])) {
                     <div class="row text-center mb-4">
                         <div class="col-6 col-md-3">
                             <div class="icon-box border p-3 rounded" data-value="missed_pickup">
-                                <img src="image/missed_pickup.png" alt="Missed Pickup" class="img-fluid mb-2">
+                                <img src="image/time-left.png" alt="Missed Pickup" class="img-fluid mb-2">
                                 <p>Missed PickUp</p>
                             </div>
                         </div>
                         <div class="col-6 col-md-3">
                             <div class="icon-box border p-3 rounded" data-value="overflowing">
-                                <img src="image/overflow.png" alt="Overflowing Bin" class="img-fluid mb-2">
+                                <img src="image/person.png" alt="Overflowing Bin" class="img-fluid mb-2">
                                 <p>Overflowing Bin</p>
                             </div>
                         </div>
                         <div class="col-6 col-md-3">
                             <div class="icon-box border p-3 rounded" data-value="dumping">
-                                <img src="image/dumping.png" alt="Illegal Dumping" class="img-fluid mb-2">
+                                <img src="image/illegal.png" alt="Illegal Dumping" class="img-fluid mb-2">
                                 <p>Illegal Dumping</p>
                             </div>
                         </div>
                         <div class="col-6 col-md-3">
                             <div class="icon-box border p-3 rounded" data-value="others">
-                                <img src="image/feedback.png" alt="Others" class="img-fluid mb-2">
+                                <img src="image/ellipsis.png" alt="Others" class="img-fluid mb-2">
                                 <p>Others</p>
                             </div>
                         </div>

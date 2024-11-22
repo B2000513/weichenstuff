@@ -71,11 +71,11 @@ if (!isset($_SESSION['username'])) {
                             while ($row2 = mysqli_fetch_assoc($result2)) {
                                 $src = "";
                                 if ($row2['pickupType'] == "household") {
-                                    $src = "image/household.png";
+                                    $src = "image/trash.png";
                                 } else if ($row2['pickupType'] == "recyclable") {
-                                    $src = "image/recyclable.png";
+                                    $src = "image/recycle-bin.png";
                                 } else if ($row2['pickupType'] == "hazardous") {
-                                    $src = "image/hazardous.png";
+                                    $src = "image/radiation-alt.png";
                                 }
                                 echo '<div class="list-group-item d-flex justify-content-between align-items-center ' . $row2['pickupType'] . ' ' . $row2['pickupDate'] . '">';
                                 echo '    <div class="d-flex align-items-center">';
