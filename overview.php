@@ -30,7 +30,7 @@ if (!isset($_SESSION['username'])) {
             <!-- Sidebar -->
             <aside class="col-md-2 bg-dark text-white p-3">
                 <div class="text-center mb-4">
-                    <img src="image/wasteX1.png" alt="Logo" class="img-fluid">
+                    <p class="title"> Wastex </p>
                 </div>
                 <?php include 'nav.php'; ?>
             </aside>
