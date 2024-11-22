@@ -20,7 +20,9 @@
 <body>
     <div class="container1">
         <aside class="col-md-3 col-lg-2 bg-dark text-light p-3">
-            <div class="logo"><img src="" alt="Logo"></div>
+            <div class="logo">
+                <p class="title"> Wastex </p>
+            </div>
             <?php include 'nav.php'; ?>
         </aside>
         <main class="main-content">
