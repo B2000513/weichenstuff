@@ -27,7 +27,7 @@ if (!isset($_SESSION['username'])) {
             <!-- Sidebar -->
             <aside class="col-md-3 col-lg-2 bg-dark text-light p-3">
                 <div class="text-center mb-4">
-                    <img src="image/wasteX1.png" alt="Logo" class="img-fluid" style="max-width: 150px;">
+                    <p class="title"> Wastex </p>                
                 </div>
                 <?php include 'nav.php'; ?>
             </aside>
