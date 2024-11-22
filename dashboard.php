@@ -1,10 +1,25 @@
 <?php
-include 'php/dbConnect.php';
-session_start();
-if (!isset($_SESSION['username'])) {
-    header("Location: login.php");
-}
+    include 'php/dbConnect.php';
+    session_start();
+    if (!isset($_SESSION['username'])) {
+        header("Location: login.php");
+    }
 
+    $email = $_SESSION['username'];
+
+    $sql1 = "SELECT comID FROM user WHERE userEmail = '$email'";
+    $result1 = mysqli_query($dbConnection, $sql1);
+    $row1 = mysqli_fetch_assoc($result1);
+    $comID = $row1['comID'];
+
+    $sql2 = "SELECT annoID, annoTitle, annoDesc, annoImage FROM announcement WHERE comID = '$comID' ORDER BY annoDate DESC";
+    $result2 = mysqli_query($dbConnection, $sql2);
+
+    // Initialize an empty array for announcements
+    $announcements = [];
+    while ($row = mysqli_fetch_assoc($result2)) {
+        $announcements[] = $row;
+    }
 ?>
 
 <!DOCTYPE html>
@@ -19,7 +34,15 @@ if (!isset($_SESSION['username'])) {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://kit.fontawesome.com/bbf63d7a1f.js" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
-
+    <style>
+        .modal-content{
+            width: 800px;
+            margin-left:-150px;
+        }
+        .profile{
+            margin-left:20px;
+        }
+    </style>
     
 </head>
 
@@ -29,7 +52,7 @@ if (!isset($_SESSION['username'])) {
             <!-- Sidebar -->
             <aside class="col-md-2 bg-dark text-white p-3">
                 <div class="text-center mb-4">
-                    <img src="image/wasteX1.png" alt="Logo" class="img-fluid">
+                    <p class="title"> Wastex </p>
                 </div>
                 <?php include 'nav.php'; ?>
             </aside>
@@ -39,36 +62,22 @@ if (!isset($_SESSION['username'])) {
                 <header class="d-flex justify-content-between align-items-center p-3 border-bottom">
                     <div>
                         <h1>My Dashboard</h1>
-                        <p class="text-muted">Welcome to wasteX</p>
+                        <p class="text-muted">Welcome to wastex</p>
                     </div>
                     <div class="d-flex align-items-center">
-                        <button class="btn btn-light me-3 position-relative" onclick="toggleNotiDropdown()">
-                            <i class="fa-solid fa-bell"></i>
-                        </button>
+                    <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fa-solid fa-bell"></i>
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <?php foreach ($announcements as $announcement) { ?>
+                                <li><a class="dropdown-item" href="#" onclick="openModal('<?php echo $announcement['annoID']; ?>')">
+                                    <h6 class="fw-bold"><?php echo htmlspecialchars($announcement['annoTitle']); ?></h6>
+                                    <p class="text-muted"><?php echo htmlspecialchars(substr($announcement['annoDesc'], 0, 50)) . '...'; ?></p>
+                                </a></li>
+                            <?php } ?>
+                        </ul>
 
-                        <!-- Notifications Dropdown -->
-                        <div class="position-absolute noti-dropdown bg-white shadow p-3" id="notiDropdown" style="display: none;">
-                            <button class="btn-close" onclick="closeNotiDropdown()"></button>
-                            <?php
-                            global $dbConnection;
-                            $email = $_SESSION['username'];
-                            $sql = "SELECT comID FROM user WHERE userEmail = '$email'";
-                            $result = mysqli_query($dbConnection, $sql);
-                            $row = mysqli_fetch_assoc($result);
-                            $comID = $row['comID'];
-
-                            $sql2 = "SELECT annoTitle, annoDesc, annoDate, annoImage FROM announcement WHERE comID = '$comID'";
-                            $result = mysqli_query($dbConnection, $sql2);
-                            while ($row = mysqli_fetch_assoc($result)) {
-                                echo "<div class='noti-item' onclick=\"showNotificationDetails('" . addslashes($row['annoTitle']) . "', '" . $row['annoDate'] . "', 'photoUpload/" . $row['annoImage'] . "', '" . addslashes($row['annoDesc']) . "')\">
-                                        <h6 class='fw-bold'>" . htmlspecialchars($row['annoTitle']) . "</h6>
-                                        <p class='text-muted'>" . htmlspecialchars(substr($row['annoDesc'], 0, 50)) . "...</p>
-                                      </div>";
-                            }
-                            ?>
-                        </div>
-
-                        <div class="text-center">
+                        <div class="text-center profile">
                             <?php
                             $sql = "SELECT userFname, userLname FROM user WHERE  userEmail  = '$email'";
                             $result = mysqli_query($dbConnection, $sql);
@@ -169,25 +178,29 @@ if (!isset($_SESSION['username'])) {
         </div>
     </div>
 
-    <!-- Notification Modal -->
-    <div class="modal fade" id="notification-modal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
+    <!-- Modal for Announcement -->
+    <div class="modal fade" id="announcementModal" tabindex="-1" aria-labelledby="announcementModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modal-title"></h5>
-                    <button type="button" class="btn-close" onclick="closeModal()"></button>
+                    <h5 class="modal-title" id="announcementModalLabel"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p id="modal-date"></p>
-                    <img id="modal-image" src="" alt="Notification Image" class="img-fluid mb-3" />
-                    <p id="modal-content"></p>
+                    <p id="modalDesc"></p>
+                    <img id="modalImage" class="img-fluid" />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Include Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="js/dashboard.js"></script>
+
 
 
     <?php
@@ -242,72 +255,20 @@ if (!isset($_SESSION['username'])) {
         });
     </script>
 
-<script>
-    function toggleNotiDropdown() {
-        const dropdown = document.getElementById('notiDropdown');
-        dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
-    }
-
-    function closeNotiDropdown() {
-        document.getElementById('notiDropdown').style.display = 'none';
-    }
-
-    // Close dropdown when clicking outside of it
-    window.onclick = function(event) {
-        const dropdown = document.getElementById('notiDropdown');
-        if (!event.target.matches('.noti, .noti *')) {
-            dropdown.style.display = 'none';
-        }
-    }
-</script>
-
     <script>
-        // document.addEventListener('DOMContentLoaded', function () {
-        //     // This will close the notification modal when clicking outside of it
-        //     window.addEventListener('click', function(event) {
-        //         const modal = document.getElementById('notification-modal');
-        // const notificationList = document.getElementById('notification-list');
+        function openModal(annoID) {
+            // Find the announcement details by its ID
+            var announcements = <?php echo json_encode($announcements); ?>;
+            var announcement = announcements.find(a => a.annoID == annoID);
 
-        // // Check if modal and notificationList are not null
-        // if (modal && notificationList) {
-        //     // Close the modal if the click is outside of it
-        //     if (event.target === modal) {
-        //         closeModal();
-        //     }
+            // Set modal content
+            document.getElementById('announcementModalLabel').innerText = announcement.annoTitle;
+            document.getElementById('modalDesc').innerText = announcement.annoDesc;
+            document.getElementById('modalImage').src = announcement.annoImage;
 
-        //     // Close the notification list if clicking outside of it
-        //     if (!notificationList.contains(event.target) && !modal.contains(event.target)) {
-        //         // Hide the notification list or perform your close logic
-        //         // closeNotificationList(); // Implement this function if necessary
-        //     }
-        // } else {
-        //     console.error("Modal or notification list element not found.");
-        // }
-        //     });
-        // });
-
-        function showNotificationDetails(title, date, image, content) {
-            // Set the content of the modal
-            document.getElementById('modal-title').innerText = title;
-            document.getElementById('modal-date').innerText = date;
-            document.getElementById('modal-content').innerText = content;
-            const modalImage = document.getElementById('modal-image');
-
-            if (image == 'photoUpload/') {
-                modalImage.style.display = 'none'; // Hide image if not present
-            } else {
-
-                modalImage.src = image;
-                modalImage.style.display = 'block'; // Show image if present
-            }
-
-            // Display the modal
-            document.getElementById('notification-modal').style.display = 'block';
-        }
-
-        function closeModal() {
-            // Hide the modal
-            document.getElementById('notification-modal').style.display = 'none';
+            // Show the modal
+            var myModal = new bootstrap.Modal(document.getElementById('announcementModal'));
+            myModal.show();
         }
     </script>
 
