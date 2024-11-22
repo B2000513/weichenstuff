@@ -69,9 +69,8 @@ if (!isset($_SESSION['username'])) {
                         </div>
 
                         <div class="text-center">
-                            <img src="image/handsome.jpeg" alt="Profile Picture" class="rounded-circle" width="40" height="40">
                             <?php
-                            $sql = "SELECT userFname, userLname FROM user WHERE comID = '$comID'";
+                            $sql = "SELECT userFname, userLname FROM user WHERE  userEmail  = '$email'";
                             $result = mysqli_query($dbConnection, $sql);
                             $row = mysqli_fetch_assoc($result);
                             $fname = $row['userFname'];

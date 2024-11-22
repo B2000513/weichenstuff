@@ -50,9 +50,9 @@ if (!isset($_SESSION['username'])) {
                             <div class="row">
                                 <?php
                                 $wasteTypes = [
-                                    ["household", "Household Waste", "image/household.png"],
-                                    ["recyclable", "Recyclable Waste", "image/recyclable.png"],
-                                    ["hazardous", "Hazardous Waste", "image/hazardous.png"]
+                                    ["household", "Household Waste","image/trash.png" ],
+                                    ["recyclable", "Recyclable Waste","image/recycle-bin.png"],
+                                    ["hazardous", "Hazardous Waste","radiation-alt.png"]
                                 ];
                                 foreach ($wasteTypes as $type) {
                                     echo "<div class='col-md-4'>
