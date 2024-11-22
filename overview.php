@@ -88,7 +88,7 @@ if (!isset($_SESSION['username'])) {
                                 <div id="curve_chart" class="d-none" style="width: 100%; height: 350px;"></div>
                             </div>
 
-                            <button class="btn btn-primary mt-3 w-100 generateBtn">Generate</button>
+                            <button class="btn btn-primary mt-3 generateBtn">Generate</button>
                         </form>
                     </div>
                 </section>

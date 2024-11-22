@@ -11,8 +11,13 @@
     <script src="https://kit.fontawesome.com/bbf63d7a1f.js" crossorigin="anonymous"></script>
     <style>
         /* General container styling */
+        .main-content{
+            margin-left:50px;
+            margin-right:50px;
+            max-width: 1500px;
+        }
+        
         .account-container {
-            max-width: 800px;
             margin: 20px auto;
             padding: 30px;
             background-color: #f8f9fa;
