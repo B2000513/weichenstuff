@@ -1,25 +1,127 @@
-/* General layout and typography */
-body {
-    font-family: 'Lucida Console', sans-serif;
-    background-color: #f3f6fa;
+@import url('https://fonts.googleapis.com/css2?family=Akaya+Kanadaka&display=swap');
+
+/* General Reset */
+* {
     margin: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Fonts & Colors */
+body {
+    font-family: 'Lucida Sans', sans-serif;
+    background-color: #f4f6f8;
     color: #333;
 }
 
 .container {
     display: flex;
     height: 100vh;
-    position: fixed;
     overflow: hidden;
 }
 
+.title {
+    font-family: "Akaya Kanadaka", system-ui;
+    font-weight: 400;
+    font-style: normal;
+    text-align: center;
+    font-size: 30px;
+    line-height: 1;
+    margin: 0;
+    margin-top: 25px;
+    margin-bottom:-40px;
+  }
+
+/* Sidebar adjustments */
+aside {
+    min-height: 100vh;
+    padding-bottom: 1rem;
+}
+
+/* Main content adjustments */
+main {
+    padding: 0.5rem;
+    background-color: #f8f9fa; /* Light gray background for contrast */
+}
+
+body {
+    /* font-family: 'Arial', sans-serif; */
+    /* font-family: "Lucida Console", "Courier New", monospace; */
+    font-family: 'Lucida Consol', sans-serif;
+    background-color: #f6f7fb;
+    color: #333;
+    height: 100%;
+}
+
+.container {
+    display: flex;
+    height: 100%;
+}
+
 .sidebar {
+    background-color: #3a3939e9;
+    /* padding: 20px; */
+    width: 300px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid #ddd;
+}
+
+.menu{
+    margin-top: 80px;
+    /* margin-left: 20px; */
+}
+
+.menu ul {
+    list-style: none;
+}
+
+.menu ul li {
+    padding: 10px;
+    padding-left: 35px;
+    height: 50px;
+}
+
+.menu ul li a {
+    text-decoration: none;
+    color: #f2f2f2;
+    display: flex;
+    align-items: center;
+}
+
+.menu ul li i{
+    margin-right: 10px;
+}
+
+.menu ul li span, .menu ul li i{
+    transition: transform 0.3s ease;
+}
+
+.menu ul li:hover span{
+    transform: scale(1.15) translateX(45px); 
+}
+
+.menu ul li:hover i{
+    transform: scale(1.2) rotate(10deg);
+}
+
+.menu ul li:hover{
+    background-color: #565353e9;
+}
+
+.menu ul li a.active {
+    color: #a2df9c;
+    font-weight:550;
+}
+
+.aside .nav{
+    background-color: rgb(11,11,11) ;
+}
+
+/* Sidebar */
+.aside {
     width: 250px;
-    background-color: #343a40;
     color: #fff;
     display: flex;
     flex-direction: column;
@@ -29,18 +131,56 @@ body {
     height: 100vh;
 }
 
-
-
-
-
-.main-content {
-    background-color: #ffffff;
-    padding: 40px;
-    width: 100%;
-    border-radius: 0 12px 12px 0;
-    box-shadow: 0 4px 20px rgba(255, 255, 255, 0.1);
+.aside .logo img {
+    width: 100px;
+    margin-bottom: 20px;
 }
 
+.aside nav ul {
+    list-style-type: none;
+    width: 100%;
+    padding: 0;
+}
+
+.aside nav ul li {
+    width: 100%;
+}
+
+.aside nav ul li a {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    color: #ddd;
+    font-size: 18px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+
+.aside nav ul li a:hover,
+.aside nav ul li a.active {
+    background-color: #495057;
+    color: #fff;
+}
+
+.aside nav ul li a.active {
+    font-weight:550 !important;
+}
+
+.aside nav ul li:hover{
+    padding:15px 20px !important; 
+    border: 1px solid black;
+
+}
+.aside nav ul li a i {
+    margin-right: 10px;
+}
+
+/* Main Content */
+.main-content {
+    margin-left: 250px;
+    padding: 20px;
+    width: calc(100% - 250px);
+}
 .banner h2 {
     color: #1a237e;
     text-align: center;
